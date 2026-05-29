@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Sam Sutton</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* Full viewport layout — everything fits without scrolling */
+    .contact-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-wrap {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 32px) 40px 32px;
+      gap: 60px;
+      align-items: start;
+    }
+
+    /* Left column — heading + social */
+    .contact-left h1 {
+      font-size: clamp(28px, 4vw, 48px);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+
+    .contact-left p {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text-dim);
+      margin-bottom: 32px;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 10px; }
+    .contact-links a {
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .contact-links a:hover { color: var(--gold); }
+
+    .contact-links-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    /* Right column — form */
+    .contact-right {}
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 12px 0 8px;
+    }
+
+    .field label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field textarea {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      resize: none;
+      width: 100%;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder { color: #ccc; }
+
+    .field textarea { min-height: 70px; }
+
+    .submit-btn {
+      margin-top: 20px;
+      background: none;
+      border: 1px solid #ccc;
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 12px 28px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .submit-btn:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #fff;
+    }
+
+    @media (max-width: 680px) {
+      .contact-wrap {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: calc(var(--nav-h) + 24px) 24px 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Sam Sutton</a>
+    <ul class="nav-links">
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="portfolio.html" onclick="toggleMenu()">Portfolio</a>
+    <a href="about.html" onclick="toggleMenu()">About</a>
+    <a href="contact.html" onclick="toggleMenu()">Contact</a>
+  </div>
+
+  <div class="contact-page">
+    <div class="contact-wrap">
+
+      <!-- Left: heading + links -->
+      <div class="contact-left">
+        <h1>Get in<br>touch</h1>
+        <p>Available for commercial, editorial, and personal projects.</p>
+
+        <p class="contact-links-label">Find me at</p>
+        <div class="contact-links">
+          <a href="https://instagram.com/YOUR_HANDLE" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://youtube.com/YOUR_CHANNEL" target="_blank" rel="noopener">YouTube</a>
+          <a href="mailto:samsutton26@gmail.com">samsutton26@gmail.com</a>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="contact-right">
+        <!--
+          CONTACT FORM SETUP (free):
+          1. Go to https://formspree.io and sign up
+          2. Create a new form — you get an ID like "xabc1234"
+          3. Replace YOUR_FORMSPREE_ID below with that ID
+        -->
+        <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" onsubmit="handleSubmit(event)">
+
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+          </div>
+
+          <div class="field">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="What's this about?">
+          </div>
+
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Tell me about your project…" required></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">Send message</button>
+        </form>
+      </div>
+
+    </div>
+
+    <footer>
+      <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
+    </footer>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.querySelector('.hamburger').classList.toggle('open');
+    }
+
+    function handleSubmit(e) {
+      if (document.querySelector('form').action.includes('YOUR_FORMSPREE_ID')) {
+        e.preventDefault();
+        alert('Set up Formspree to enable this form.\nSee the comment in contact.html for instructions.');
+        return;
+      }
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio — Sam Sutton</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .page-header {
+      padding: calc(var(--nav-h) + 20px) 60px 28px;
+      border-bottom: 1px solid #efefef;
+    }
+    .page-header h1 {
+      font-size: clamp(28px, 4vw, 48px);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+
+    /* ── Project grid ── */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      padding: 16px 60px 60px;
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .project-card img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .project-card:hover img { transform: scale(1.03); }
+
+    /* placeholder */
+    .proj-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .project-card:hover .proj-placeholder { background: #e4e4e4; }
+    .proj-placeholder span {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #bbb;
+    }
+
+    .project-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 20px 18px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .project-card:hover .project-info { opacity: 1; }
+    .project-info h3 {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .project-info p {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.75);
+      margin-top: 3px;
+    }
+
+    /* ── Project modal / lightbox ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal-img img {
+      width: 100%;
+      display: block;
+      max-height: 60vh;
+      object-fit: cover;
+    }
+    .modal-body { padding: 28px 32px 36px; }
+    .modal-body h2 {
+      font-size: 22px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .modal-body .modal-meta {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+    .modal-body p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #444;
+    }
+    .modal-close {
+      position: absolute;
+      top: 14px; right: 18px;
+      font-size: 22px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      z-index: 1;
+    }
+
+    @media (max-width: 768px) {
+      .page-header { padding: calc(var(--nav-h) + 20px) 24px 20px; }
+      .project-grid { grid-template-columns: 1fr 1fr; padding: 12px 24px 40px; }
+    }
+    @media (max-width: 480px) {
+      .project-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Sam Sutton</a>
+    <ul class="nav-links">
+      <li><a href="portfolio.html" class="active">Portfolio</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="portfolio.html" onclick="toggleMenu()">Portfolio</a>
+    <a href="about.html" onclick="toggleMenu()">About</a>
+    <a href="contact.html" onclick="toggleMenu()">Contact</a>
+  </div>
+
+  <div class="page-content">
+
+    <div class="page-header">
+      <h1>Portfolio</h1>
+    </div>
+
+    <!--
+      ═══════════════════════════════════════════════════
+      HOW TO ADD A PROJECT:
+
+      1. Copy one <div class="project-card"> block
+      2. Set data-category to match a filter button
+         (commercial / editorial / portraiture / video)
+      3. Replace the placeholder with:
+           <img src="your-photo.jpg" alt="Project name">
+      4. Update the title and category text in .project-info
+      5. Update the modal content (h2, meta, description)
+
+      - Use the same word as data-category on your cards
+      ═══════════════════════════════════════════════════
+    -->
+
+    <div class="project-grid" id="projectGrid">
+
+      <div class="project-card" data-category="commercial" onclick="openModal('modal-1')">
+        <div class="proj-placeholder"><span>Add photo</span></div>
+        <div class="project-info">
+          <h3>Project Title</h3>
+          <p>Commercial · 2025</p>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="editorial" onclick="openModal('modal-2')">
+        <div class="proj-placeholder"><span>Add photo</span></div>
+        <div class="project-info">
+          <h3>Project Title</h3>
+          <p>Editorial · 2025</p>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="portraiture" onclick="openModal('modal-3')">
+        <div class="proj-placeholder"><span>Add photo</span></div>
+        <div class="project-info">
+          <h3>Project Title</h3>
+          <p>Portraiture · 2024</p>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="video" onclick="openModal('modal-4')">
+        <div class="proj-placeholder"><span>Add photo</span></div>
+        <div class="project-info">
+          <h3>Project Title</h3>
+          <p>Video · 2024</p>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="commercial" onclick="openModal('modal-5')">
+        <div class="proj-placeholder"><span>Add photo</span></div>
+        <div class="project-info">
+          <h3>Project Title</h3>
+          <p>Commercial · 2024</p>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="editorial" onclick="openModal('modal-6')">
+        <div class="proj-placeholder"><span>Add photo</span></div>
+        <div class="project-info">
+          <h3>Project Title</h3>
+          <p>Editorial · 2023</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Project modals — one per project card above -->
+  <!-- Modal 1 -->
+  <div class="modal-overlay" id="modal-1">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-1')">✕</button>
+      <div class="modal-img">
+        <!-- Replace with: <img src="your-photo.jpg" alt="Project name"> -->
+        <div style="height:300px; background:#f0f0f0;"></div>
+      </div>
+      <div class="modal-body">
+        <h2>Project Title</h2>
+        <p class="modal-meta">Commercial &nbsp;·&nbsp; Client Name &nbsp;·&nbsp; 2025</p>
+        <p>Describe this project here — what it was, who it was for, what you were going for.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2 -->
+  <div class="modal-overlay" id="modal-2">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-2')">✕</button>
+      <div class="modal-img">
+        <div style="height:300px; background:#f0f0f0;"></div>
+      </div>
+      <div class="modal-body">
+        <h2>Project Title</h2>
+        <p class="modal-meta">Editorial &nbsp;·&nbsp; Publication &nbsp;·&nbsp; 2025</p>
+        <p>Describe this project here.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3 -->
+  <div class="modal-overlay" id="modal-3">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-3')">✕</button>
+      <div class="modal-img">
+        <div style="height:300px; background:#f0f0f0;"></div>
+      </div>
+      <div class="modal-body">
+        <h2>Project Title</h2>
+        <p class="modal-meta">Portraiture &nbsp;·&nbsp; 2024</p>
+        <p>Describe this project here.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4 -->
+  <div class="modal-overlay" id="modal-4">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-4')">✕</button>
+      <div class="modal-img">
+        <div style="height:300px; background:#f0f0f0;"></div>
+      </div>
+      <div class="modal-body">
+        <h2>Project Title</h2>
+        <p class="modal-meta">Video &nbsp;·&nbsp; 2024</p>
+        <p>Describe this project here.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5 -->
+  <div class="modal-overlay" id="modal-5">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-5')">✕</button>
+      <div class="modal-img">
+        <div style="height:300px; background:#f0f0f0;"></div>
+      </div>
+      <div class="modal-body">
+        <h2>Project Title</h2>
+        <p class="modal-meta">Commercial &nbsp;·&nbsp; Client Name &nbsp;·&nbsp; 2024</p>
+        <p>Describe this project here.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 6 -->
+  <div class="modal-overlay" id="modal-6">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-6')">✕</button>
+      <div class="modal-img">
+        <div style="height:300px; background:#f0f0f0;"></div>
+      </div>
+      <div class="modal-body">
+        <h2>Project Title</h2>
+        <p class="modal-meta">Editorial &nbsp;·&nbsp; 2023</p>
+        <p>Describe this project here.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.querySelector('.hamburger').classList.toggle('open');
+    }
+
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.modal-overlay').forEach(m => {
+      m.addEventListener('click', e => {
+        if (e.target === m) closeModal(m.id);
+      });
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+      }
+    });
+  </script>
+
+</body>
+</html>
