@@ -6,7 +6,6 @@
   <title>Sam Sutton</title>
   <link rel="stylesheet" href="shared.css">
   <style>
-    /* ── HERO ── */
     .hero {
       height: auto;
       padding: 28px 24px 20px;
@@ -22,7 +21,6 @@
       text-transform: uppercase;
     }
 
-    /* ── CAROUSEL SECTION ── */
     .carousel-section {
       padding: 20px 0 40px;
     }
@@ -32,7 +30,6 @@
       overflow: hidden;
     }
 
-    /* padding creates the side peek zones; overflow:hidden on outer clips scrollbar */
     .carousel-track-wrap {
       overflow: visible;
       padding: 0 15%;
@@ -195,39 +192,25 @@
           <div class="carousel-track" id="carouselTrack">
 
             <!--
-              HOW TO ADD YOUR PROJECT IMAGES:
-              Replace each <div class="carousel-placeholder"> with:
-                <img src="your-photo.jpg" alt="Project name">
-              Then update the title in .carousel-label h3
+              Each slide links to a project on portfolio.html.
+              - data-link sets where clicking the active slide goes
+              - Replace carousel-placeholder with your cover image once uploaded
+              - Slide 1 links to project-1 (Portraiture)
+              - Slides 2 & 3 link to project-2 and project-3 (update titles when ready)
             -->
 
-            <div class="carousel-slide">
-              <div class="carousel-placeholder"><span>Add photo</span></div>
+            <div class="carousel-slide" data-link="portfolio.html#project-1">
+              <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
+              <div class="carousel-label"><h3>Portraiture</h3></div>
+            </div>
+
+            <div class="carousel-slide" data-link="portfolio.html#project-2">
+              <div class="carousel-placeholder"><span>Add cover photo</span></div>
               <div class="carousel-label"><h3>Project Title</h3></div>
             </div>
 
-            <div class="carousel-slide">
-              <div class="carousel-placeholder"><span>Add photo</span></div>
-              <div class="carousel-label"><h3>Project Title</h3></div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="carousel-placeholder"><span>Add photo</span></div>
-              <div class="carousel-label"><h3>Project Title</h3></div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="carousel-placeholder"><span>Add photo</span></div>
-              <div class="carousel-label"><h3>Project Title</h3></div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="carousel-placeholder"><span>Add photo</span></div>
-              <div class="carousel-label"><h3>Project Title</h3></div>
-            </div>
-
-            <div class="carousel-slide">
-              <div class="carousel-placeholder"><span>Add photo</span></div>
+            <div class="carousel-slide" data-link="portfolio.html#project-3">
+              <div class="carousel-placeholder"><span>Add cover photo</span></div>
               <div class="carousel-label"><h3>Project Title</h3></div>
             </div>
 
@@ -258,24 +241,21 @@
     const track = document.getElementById('carouselTrack');
     const dotsWrap = document.getElementById('carouselDots');
 
-    // Build cloned infinite track: clone last slide before first, first slide after last
     const originalSlides = Array.from(track.children);
     const total = originalSlides.length;
 
-    // Prepend clone of last, append clone of first
+    // Clone last slide before first, first slide after last
     const cloneFirst = originalSlides[0].cloneNode(true);
     const cloneLast  = originalSlides[total - 1].cloneNode(true);
     track.appendChild(cloneFirst);
     track.insertBefore(cloneLast, track.firstChild);
 
-    // All slides including clones
     const allSlides = Array.from(track.children);
-    // Real slides start at index 1
-    let current = 1; // start on first real slide
+    let current = 1;
     let isTransitioning = false;
 
     function slideWidth() {
-      return allSlides[1].offsetWidth + 24; // width + gap
+      return allSlides[1].offsetWidth + 24;
     }
 
     function setPosition(index, animate) {
@@ -286,7 +266,6 @@
     }
 
     function updateActive() {
-      // active class on real index (current maps to original index current-1)
       allSlides.forEach((s, i) => s.classList.toggle('active', i === current));
     }
 
@@ -310,15 +289,12 @@
       buildDots();
     }
 
-    // After transition, silently jump if we're on a clone
     track.addEventListener('transitionend', () => {
       isTransitioning = false;
       if (current === 0) {
-        // jumped to clone of last — silently move to real last
         current = total;
         setPosition(current, false);
       } else if (current === total + 1) {
-        // jumped to clone of first — silently move to real first
         current = 1;
         setPosition(current, false);
       }
@@ -330,20 +306,23 @@
       goTo(current + dir);
     }
 
-    // Click non-active slide to go to it; click active to view portfolio
+    // Clicking active slide follows its data-link
+    // Clicking inactive slide navigates to it
     allSlides.forEach((slide, i) => {
       slide.addEventListener('click', () => {
         if (i !== current) {
           goTo(i);
         } else {
-          location.href = 'portfolio.html';
+          // Get link from the original slide (clones may not have data-link)
+          const realIndex = ((current - 1) + total) % total;
+          const link = originalSlides[realIndex].dataset.link;
+          if (link) location.href = link;
         }
       });
     });
 
     window.addEventListener('resize', () => setPosition(current, false));
 
-    // Initialise
     setPosition(current, false);
     updateActive();
     buildDots();

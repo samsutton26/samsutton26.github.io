@@ -16,7 +16,6 @@
       text-transform: uppercase;
     }
 
-
     /* ── Project grid ── */
     .project-grid {
       display: grid;
@@ -40,7 +39,6 @@
     }
     .project-card:hover img { transform: scale(1.03); }
 
-    /* placeholder */
     .proj-placeholder {
       width: 100%;
       aspect-ratio: 4/3;
@@ -61,8 +59,8 @@
     .project-info {
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      padding: 20px 18px 16px;
-      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+      padding: 40px 18px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
       opacity: 0;
       transition: opacity 0.3s;
     }
@@ -74,75 +72,145 @@
       text-transform: uppercase;
       color: #fff;
     }
-    .project-info p {
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.75);
-      margin-top: 3px;
-    }
 
-    /* ── Project modal / lightbox ── */
-    .modal-overlay {
+    /* ── Project lightbox with internal carousel ── */
+    .project-modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.92);
       z-index: 300;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px;
     }
-    .modal-overlay.open { display: flex; }
-    .modal-box {
-      background: #fff;
-      max-width: 900px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-    }
-    .modal-img img {
-      width: 100%;
-      display: block;
-      max-height: 60vh;
-      object-fit: cover;
-    }
-    .modal-body { padding: 28px 32px 36px; }
-    .modal-body h2 {
-      font-size: 22px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .modal-body .modal-meta {
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 16px;
-    }
-    .modal-body p {
-      font-size: 14px;
-      line-height: 1.8;
-      color: #444;
-    }
+    .project-modal.open { display: flex; }
+
     .modal-close {
       position: absolute;
-      top: 14px; right: 18px;
-      font-size: 22px;
+      top: 20px; right: 24px;
+      font-size: 24px;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
       background: none;
       border: none;
+      line-height: 1;
+      z-index: 10;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: #fff; }
+
+    .modal-title {
+      position: absolute;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      white-space: nowrap;
+    }
+
+    /* Inner carousel */
+    .modal-carousel {
+      width: 100%;
+      max-width: 1100px;
+      padding: 0 80px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .modal-track-outer {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .modal-track-wrap {
+      overflow: visible;
+      padding: 0 12%;
+    }
+
+    .modal-track {
+      display: flex;
+      gap: 20px;
+      transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .modal-slide {
+      flex: 0 0 100%;
+      opacity: 0.3;
+      transform: scale(0.93);
+      transition: opacity 0.4s, transform 0.4s;
       cursor: pointer;
-      color: #fff;
-      z-index: 1;
+    }
+    .modal-slide.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .modal-slide img {
+      display: block;
+      width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      background: #111;
+    }
+
+    .modal-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      font-size: 28px;
+      cursor: pointer;
+      padding: 16px 8px;
+      transition: color 0.2s;
+      z-index: 5;
+    }
+    .modal-btn:hover { color: var(--gold); }
+    .modal-btn.prev { left: 0; }
+    .modal-btn.next { right: 0; }
+
+    .modal-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .modal-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: background 0.2s;
+    }
+    .modal-dot.active { background: var(--gold); }
+
+    .modal-counter {
+      margin-top: 10px;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
     }
 
     @media (max-width: 768px) {
       .page-header { padding: calc(var(--nav-h) + 20px) 24px 20px; }
       .project-grid { grid-template-columns: 1fr 1fr; padding: 12px 24px 40px; }
+      .modal-carousel { padding: 0 48px; }
+      .modal-track-wrap { padding: 0 8%; }
     }
     @media (max-width: 480px) {
       .project-grid { grid-template-columns: 1fr; }
+      .modal-track-wrap { padding: 0 5%; }
     }
   </style>
 </head>
@@ -167,169 +235,36 @@
   </div>
 
   <div class="page-content">
-
     <div class="page-header">
       <h1>Portfolio</h1>
     </div>
 
-    <!--
-      ═══════════════════════════════════════════════════
-      HOW TO ADD A PROJECT:
+    <div class="project-grid">
 
-      1. Copy one <div class="project-card"> block
-      2. Set data-category to match a filter button
-         (commercial / editorial / portraiture / video)
-      3. Replace the placeholder with:
-           <img src="your-photo.jpg" alt="Project name">
-      4. Update the title and category text in .project-info
-      5. Update the modal content (h2, meta, description)
-
-      - Use the same word as data-category on your cards
-      ═══════════════════════════════════════════════════
-    -->
-
-    <div class="project-grid" id="projectGrid">
-
-     <div class="project-card" id="project-1" data-category="commercial" onclick="openModal('modal-1')">
-        <div class="proj-placeholder"><span>Add photo</span></div>
+      <!-- PROJECT 1: Portraiture -->
+      <div class="project-card" id="project-1" onclick="openProject('portraiture')">
+        <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
         <div class="project-info">
-          <h3>Project Title</h3>
-          <p>Commercial · 2025</p>
+          <h3>Portraiture</h3>
         </div>
       </div>
 
-     <div class="project-card" id="project-2" data-category="commercial" onclick="openModal('modal-1')">
-        <div class="proj-placeholder"><span>Add photo</span></div>
+      <!-- PROJECT 2: placeholder — rename and add images when ready -->
+      <div class="project-card" id="project-2" onclick="openProject('project2')">
+        <div class="proj-placeholder"><span>Add cover photo</span></div>
         <div class="project-info">
           <h3>Project Title</h3>
-          <p>Editorial · 2025</p>
         </div>
       </div>
 
-      <div class="project-card" id="project-3" data-category="commercial" onclick="openModal('modal-1')">
-        <div class="proj-placeholder"><span>Add photo</span></div>
+      <!-- PROJECT 3: placeholder — rename and add images when ready -->
+      <div class="project-card" id="project-3" onclick="openProject('project3')">
+        <div class="proj-placeholder"><span>Add cover photo</span></div>
         <div class="project-info">
           <h3>Project Title</h3>
-          <p>Portraiture · 2024</p>
         </div>
       </div>
 
-      <div class="project-card" id="project-4" data-category="commercial" onclick="openModal('modal-1')">
-        <div class="proj-placeholder"><span>Add photo</span></div>
-        <div class="project-info">
-          <h3>Project Title</h3>
-          <p>Video · 2024</p>
-        </div>
-      </div>
-
-      <div class="project-card" id="project-5" data-category="commercial" onclick="openModal('modal-1')">
-        <div class="proj-placeholder"><span>Add photo</span></div>
-        <div class="project-info">
-          <h3>Project Title</h3>
-          <p>Commercial · 2024</p>
-        </div>
-      </div>
-
-      <div class="project-card" id="project-6" data-category="commercial" onclick="openModal('modal-1')">
-        <div class="proj-placeholder"><span>Add photo</span></div>
-        <div class="project-info">
-          <h3>Project Title</h3>
-          <p>Editorial · 2023</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Project modals — one per project card above -->
-  <!-- Modal 1 -->
-  <div class="modal-overlay" id="modal-1">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeModal('modal-1')">✕</button>
-      <div class="modal-img">
-        <!-- Replace with: <img src="your-photo.jpg" alt="Project name"> -->
-        <div style="height:300px; background:#f0f0f0;"></div>
-      </div>
-      <div class="modal-body">
-        <h2>Project Title</h2>
-        <p class="modal-meta">Commercial &nbsp;·&nbsp; Client Name &nbsp;·&nbsp; 2025</p>
-        <p>Describe this project here — what it was, who it was for, what you were going for.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 2 -->
-  <div class="modal-overlay" id="modal-2">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeModal('modal-2')">✕</button>
-      <div class="modal-img">
-        <div style="height:300px; background:#f0f0f0;"></div>
-      </div>
-      <div class="modal-body">
-        <h2>Project Title</h2>
-        <p class="modal-meta">Editorial &nbsp;·&nbsp; Publication &nbsp;·&nbsp; 2025</p>
-        <p>Describe this project here.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 3 -->
-  <div class="modal-overlay" id="modal-3">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeModal('modal-3')">✕</button>
-      <div class="modal-img">
-        <div style="height:300px; background:#f0f0f0;"></div>
-      </div>
-      <div class="modal-body">
-        <h2>Project Title</h2>
-        <p class="modal-meta">Portraiture &nbsp;·&nbsp; 2024</p>
-        <p>Describe this project here.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 4 -->
-  <div class="modal-overlay" id="modal-4">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeModal('modal-4')">✕</button>
-      <div class="modal-img">
-        <div style="height:300px; background:#f0f0f0;"></div>
-      </div>
-      <div class="modal-body">
-        <h2>Project Title</h2>
-        <p class="modal-meta">Video &nbsp;·&nbsp; 2024</p>
-        <p>Describe this project here.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 5 -->
-  <div class="modal-overlay" id="modal-5">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeModal('modal-5')">✕</button>
-      <div class="modal-img">
-        <div style="height:300px; background:#f0f0f0;"></div>
-      </div>
-      <div class="modal-body">
-        <h2>Project Title</h2>
-        <p class="modal-meta">Commercial &nbsp;·&nbsp; Client Name &nbsp;·&nbsp; 2024</p>
-        <p>Describe this project here.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 6 -->
-  <div class="modal-overlay" id="modal-6">
-    <div class="modal-box">
-      <button class="modal-close" onclick="closeModal('modal-6')">✕</button>
-      <div class="modal-img">
-        <div style="height:300px; background:#f0f0f0;"></div>
-      </div>
-      <div class="modal-body">
-        <h2>Project Title</h2>
-        <p class="modal-meta">Editorial &nbsp;·&nbsp; 2023</p>
-        <p>Describe this project here.</p>
-      </div>
     </div>
   </div>
 
@@ -337,32 +272,209 @@
     <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
   </footer>
 
+  <!-- ═══════════════════════════════════════════════
+       PROJECT MODALS
+       Each modal contains its own looping carousel.
+       To add images: add more <img> tags inside the
+       relevant .modal-track div.
+       ═══════════════════════════════════════════════ -->
+
+  <!-- PORTRAITURE MODAL -->
+  <div class="project-modal" id="modal-portraiture">
+    <button class="modal-close" onclick="closeProject('portraiture')">✕</button>
+    <span class="modal-title">Portraiture</span>
+    <div class="modal-carousel">
+      <div class="modal-track-outer">
+        <button class="modal-btn prev" onclick="modalMove('portraiture', -1)">&#8592;</button>
+        <button class="modal-btn next" onclick="modalMove('portraiture', 1)">&#8594;</button>
+        <div class="modal-track-wrap">
+          <div class="modal-track" id="track-portraiture">
+            <div class="modal-slide"><img src="Sam Sutton Portraiture 1.webp" alt="Portraiture 1"></div>
+            <div class="modal-slide"><img src="Sam Sutton Portraiture 2.webp" alt="Portraiture 2"></div>
+            <div class="modal-slide"><img src="Sam Sutton Portraiture 3.jpg"  alt="Portraiture 3"></div>
+            <div class="modal-slide"><img src="Sam Sutton Portraiture 4.webp" alt="Portraiture 4"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-dots" id="dots-portraiture"></div>
+      <div class="modal-counter" id="counter-portraiture"></div>
+    </div>
+  </div>
+
+  <!-- PROJECT 2 MODAL — add your images here when ready -->
+  <div class="project-modal" id="modal-project2">
+    <button class="modal-close" onclick="closeProject('project2')">✕</button>
+    <span class="modal-title">Project Title</span>
+    <div class="modal-carousel">
+      <div class="modal-track-outer">
+        <button class="modal-btn prev" onclick="modalMove('project2', -1)">&#8592;</button>
+        <button class="modal-btn next" onclick="modalMove('project2', 1)">&#8594;</button>
+        <div class="modal-track-wrap">
+          <div class="modal-track" id="track-project2">
+            <!-- Add images here: <div class="modal-slide"><img src="your-photo.jpg" alt="..."></div> -->
+            <div class="modal-slide">
+              <div style="width:100%;aspect-ratio:3/2;background:#222;display:flex;align-items:center;justify-content:center;">
+                <span style="color:#555;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;">Add images</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-dots" id="dots-project2"></div>
+      <div class="modal-counter" id="counter-project2"></div>
+    </div>
+  </div>
+
+  <!-- PROJECT 3 MODAL — add your images here when ready -->
+  <div class="project-modal" id="modal-project3">
+    <button class="modal-close" onclick="closeProject('project3')">✕</button>
+    <span class="modal-title">Project Title</span>
+    <div class="modal-carousel">
+      <div class="modal-track-outer">
+        <button class="modal-btn prev" onclick="modalMove('project3', -1)">&#8592;</button>
+        <button class="modal-btn next" onclick="modalMove('project3', 1)">&#8594;</button>
+        <div class="modal-track-wrap">
+          <div class="modal-track" id="track-project3">
+            <!-- Add images here: <div class="modal-slide"><img src="your-photo.jpg" alt="..."></div> -->
+            <div class="modal-slide">
+              <div style="width:100%;aspect-ratio:3/2;background:#222;display:flex;align-items:center;justify-content:center;">
+                <span style="color:#555;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;">Add images</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-dots" id="dots-project3"></div>
+      <div class="modal-counter" id="counter-project3"></div>
+    </div>
+  </div>
+
   <script>
     function toggleMenu() {
       document.getElementById('mobileMenu').classList.toggle('open');
       document.querySelector('.hamburger').classList.toggle('open');
     }
 
+    // ── Per-project carousel state ──
+    const state = {};
 
-    function openModal(id) {
-      document.getElementById(id).classList.add('open');
+    function initCarousel(id) {
+      if (state[id]) return; // already initialised
+      const track = document.getElementById('track-' + id);
+      const origSlides = Array.from(track.children);
+      const total = origSlides.length;
+      if (total === 0) return;
+
+      // Clone first and last for infinite loop
+      const cloneFirst = origSlides[0].cloneNode(true);
+      const cloneLast  = origSlides[total - 1].cloneNode(true);
+      track.appendChild(cloneFirst);
+      track.insertBefore(cloneLast, track.firstChild);
+
+      state[id] = { current: 1, total, isTransitioning: false };
+      setModalPosition(id, 1, false);
+      updateModalActive(id);
+      buildModalDots(id);
+    }
+
+    function slideWidth(id) {
+      const track = document.getElementById('track-' + id);
+      return track.children[1].offsetWidth + 20;
+    }
+
+    function setModalPosition(id, index, animate) {
+      const track = document.getElementById('track-' + id);
+      track.style.transition = animate
+        ? 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        : 'none';
+      track.style.transform = `translateX(-${index * slideWidth(id)}px)`;
+    }
+
+    function updateModalActive(id) {
+      const track = document.getElementById('track-' + id);
+      const slides = Array.from(track.children);
+      const cur = state[id].current;
+      slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+    }
+
+    function buildModalDots(id) {
+      const dotsEl = document.getElementById('dots-' + id);
+      const counterEl = document.getElementById('counter-' + id);
+      const { current, total } = state[id];
+      const realIndex = current - 1;
+      dotsEl.innerHTML = '';
+      for (let i = 0; i < total; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'modal-dot' + (i === realIndex ? ' active' : '');
+        btn.onclick = () => modalGoTo(id, i + 1);
+        dotsEl.appendChild(btn);
+      }
+      counterEl.textContent = `${realIndex + 1} / ${total}`;
+    }
+
+    function modalGoTo(id, index, animate = true) {
+      if (!state[id] || state[id].isTransitioning) return;
+      state[id].isTransitioning = true;
+      state[id].current = index;
+      setModalPosition(id, index, animate);
+      updateModalActive(id);
+      buildModalDots(id);
+
+      const track = document.getElementById('track-' + id);
+      track.addEventListener('transitionend', function handler() {
+        track.removeEventListener('transitionend', handler);
+        state[id].isTransitioning = false;
+        const { total } = state[id];
+        if (state[id].current === 0) {
+          state[id].current = total;
+          setModalPosition(id, total, false);
+        } else if (state[id].current === total + 1) {
+          state[id].current = 1;
+          setModalPosition(id, 1, false);
+        }
+        updateModalActive(id);
+        buildModalDots(id);
+      });
+    }
+
+    function modalMove(id, dir) {
+      if (!state[id]) return;
+      modalGoTo(id, state[id].current + dir);
+    }
+
+    function openProject(id) {
+      initCarousel(id);
+      document.getElementById('modal-' + id).classList.add('open');
       document.body.style.overflow = 'hidden';
     }
 
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('open');
+    function closeProject(id) {
+      document.getElementById('modal-' + id).classList.remove('open');
       document.body.style.overflow = '';
     }
 
-    document.querySelectorAll('.modal-overlay').forEach(m => {
-      m.addEventListener('click', e => {
-        if (e.target === m) closeModal(m.id);
+    // Close on backdrop click
+    document.querySelectorAll('.project-modal').forEach(modal => {
+      modal.addEventListener('click', e => {
+        if (e.target === modal) closeProject(modal.id.replace('modal-', ''));
       });
     });
 
+    // Keyboard navigation
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+      const open = document.querySelector('.project-modal.open');
+      if (!open) return;
+      const id = open.id.replace('modal-', '');
+      if (e.key === 'Escape')      closeProject(id);
+      if (e.key === 'ArrowRight')  modalMove(id, 1);
+      if (e.key === 'ArrowLeft')   modalMove(id, -1);
+    });
+
+    // Scroll to project if arriving via anchor link from index page
+    window.addEventListener('load', () => {
+      if (window.location.hash) {
+        const el = document.querySelector(window.location.hash);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
   </script>
