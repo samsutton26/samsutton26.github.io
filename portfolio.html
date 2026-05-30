@@ -16,7 +16,6 @@
       text-transform: uppercase;
     }
 
-    /* ── Project grid ── */
     .project-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -46,9 +45,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
     }
-    .project-card:hover .proj-placeholder { background: #e4e4e4; }
     .proj-placeholder span {
       font-size: 10px;
       letter-spacing: 0.12em;
@@ -73,7 +70,7 @@
       color: #fff;
     }
 
-    /* ── Project lightbox with internal carousel ── */
+    /* ── Project modal with carousel ── */
     .project-modal {
       display: none;
       position: fixed;
@@ -112,7 +109,6 @@
       white-space: nowrap;
     }
 
-    /* Inner carousel */
     .modal-carousel {
       width: 100%;
       max-width: 1100px;
@@ -244,25 +240,19 @@
       <!-- PROJECT 1: Portraiture -->
       <div class="project-card" id="project-1" onclick="openProject('portraiture')">
         <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
-        <div class="project-info">
-          <h3>Portraiture</h3>
-        </div>
+        <div class="project-info"><h3>Portraiture</h3></div>
       </div>
 
-      <!-- PROJECT 2: placeholder — rename and add images when ready -->
-      <div class="project-card" id="project-2" onclick="openProject('project2')">
-        <div class="proj-placeholder"><span>Add cover photo</span></div>
-        <div class="project-info">
-          <h3>Project Title</h3>
-        </div>
+      <!-- PROJECT 2: British Columbia -->
+      <div class="project-card" id="project-2" onclick="openProject('bc')">
+        <img src="Sam Sutton British Columbia 1.jpg" alt="British Columbia">
+        <div class="project-info"><h3>British Columbia</h3></div>
       </div>
 
-      <!-- PROJECT 3: placeholder — rename and add images when ready -->
-      <div class="project-card" id="project-3" onclick="openProject('project3')">
-        <div class="proj-placeholder"><span>Add cover photo</span></div>
-        <div class="project-info">
-          <h3>Project Title</h3>
-        </div>
+      <!-- PROJECT 3: Kalymnos -->
+      <div class="project-card" id="project-3" onclick="openProject('kalymnos')">
+        <img src="Sam_Sutton-18.jpg" alt="Kalymnos">
+        <div class="project-info"><h3>Kalymnos</h3></div>
       </div>
 
     </div>
@@ -271,13 +261,6 @@
   <footer>
     <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
   </footer>
-
-  <!-- ═══════════════════════════════════════════════
-       PROJECT MODALS
-       Each modal contains its own looping carousel.
-       To add images: add more <img> tags inside the
-       relevant .modal-track div.
-       ═══════════════════════════════════════════════ -->
 
   <!-- PORTRAITURE MODAL -->
   <div class="project-modal" id="modal-portraiture">
@@ -301,51 +284,51 @@
     </div>
   </div>
 
-  <!-- PROJECT 2 MODAL — add your images here when ready -->
-  <div class="project-modal" id="modal-project2">
-    <button class="modal-close" onclick="closeProject('project2')">✕</button>
-    <span class="modal-title">Project Title</span>
+  <!-- BRITISH COLUMBIA MODAL -->
+  <div class="project-modal" id="modal-bc">
+    <button class="modal-close" onclick="closeProject('bc')">✕</button>
+    <span class="modal-title">British Columbia</span>
     <div class="modal-carousel">
       <div class="modal-track-outer">
-        <button class="modal-btn prev" onclick="modalMove('project2', -1)">&#8592;</button>
-        <button class="modal-btn next" onclick="modalMove('project2', 1)">&#8594;</button>
+        <button class="modal-btn prev" onclick="modalMove('bc', -1)">&#8592;</button>
+        <button class="modal-btn next" onclick="modalMove('bc', 1)">&#8594;</button>
         <div class="modal-track-wrap">
-          <div class="modal-track" id="track-project2">
-            <!-- Add images here: <div class="modal-slide"><img src="your-photo.jpg" alt="..."></div> -->
-            <div class="modal-slide">
-              <div style="width:100%;aspect-ratio:3/2;background:#222;display:flex;align-items:center;justify-content:center;">
-                <span style="color:#555;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;">Add images</span>
-              </div>
-            </div>
+          <div class="modal-track" id="track-bc">
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 1.jpg" alt="British Columbia 1"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 2.jpg" alt="British Columbia 2"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia 3"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 4.jpg" alt="British Columbia 4"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 5.jpg" alt="British Columbia 5"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 6.jpg" alt="British Columbia 6"></div>
           </div>
         </div>
       </div>
-      <div class="modal-dots" id="dots-project2"></div>
-      <div class="modal-counter" id="counter-project2"></div>
+      <div class="modal-dots" id="dots-bc"></div>
+      <div class="modal-counter" id="counter-bc"></div>
     </div>
   </div>
 
-  <!-- PROJECT 3 MODAL — add your images here when ready -->
-  <div class="project-modal" id="modal-project3">
-    <button class="modal-close" onclick="closeProject('project3')">✕</button>
-    <span class="modal-title">Project Title</span>
+  <!-- KALYMNOS MODAL -->
+  <div class="project-modal" id="modal-kalymnos">
+    <button class="modal-close" onclick="closeProject('kalymnos')">✕</button>
+    <span class="modal-title">Kalymnos</span>
     <div class="modal-carousel">
       <div class="modal-track-outer">
-        <button class="modal-btn prev" onclick="modalMove('project3', -1)">&#8592;</button>
-        <button class="modal-btn next" onclick="modalMove('project3', 1)">&#8594;</button>
+        <button class="modal-btn prev" onclick="modalMove('kalymnos', -1)">&#8592;</button>
+        <button class="modal-btn next" onclick="modalMove('kalymnos', 1)">&#8594;</button>
         <div class="modal-track-wrap">
-          <div class="modal-track" id="track-project3">
-            <!-- Add images here: <div class="modal-slide"><img src="your-photo.jpg" alt="..."></div> -->
-            <div class="modal-slide">
-              <div style="width:100%;aspect-ratio:3/2;background:#222;display:flex;align-items:center;justify-content:center;">
-                <span style="color:#555;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;">Add images</span>
-              </div>
-            </div>
+          <div class="modal-track" id="track-kalymnos">
+            <div class="modal-slide"><img src="Sam_Sutton-18.jpg"       alt="Kalymnos 1"></div>
+            <div class="modal-slide"><img src="Sam_Sutton-4.jpg"        alt="Kalymnos 2"></div>
+            <div class="modal-slide"><img src="Sam_Sutton-6.jpg"        alt="Kalymnos 3"></div>
+            <div class="modal-slide"><img src="Sam_Sutton_Kaly-23.jpg"  alt="Kalymnos 4"></div>
+            <div class="modal-slide"><img src="Sam_Sutton_Kaly-26.jpg"  alt="Kalymnos 5"></div>
+            <div class="modal-slide"><img src="Sam_Sutton_Kaly-39.jpg"  alt="Kalymnos 6"></div>
           </div>
         </div>
       </div>
-      <div class="modal-dots" id="dots-project3"></div>
-      <div class="modal-counter" id="counter-project3"></div>
+      <div class="modal-dots" id="dots-kalymnos"></div>
+      <div class="modal-counter" id="counter-kalymnos"></div>
     </div>
   </div>
 
@@ -355,30 +338,43 @@
       document.querySelector('.hamburger').classList.toggle('open');
     }
 
-    // ── Per-project carousel state ──
     const state = {};
 
     function initCarousel(id) {
-      if (state[id]) return; // already initialised
+      // Always reset so first image is always slide 1
       const track = document.getElementById('track-' + id);
+
+      // Remove any previously added clones
+      const existing = state[id];
+      if (existing) {
+        // Remove clones (first and last child added previously)
+        track.removeChild(track.firstChild);
+        track.removeChild(track.lastChild);
+      }
+
       const origSlides = Array.from(track.children);
       const total = origSlides.length;
       if (total === 0) return;
 
-      // Clone first and last for infinite loop
+      // Add fresh clones for infinite loop
       const cloneFirst = origSlides[0].cloneNode(true);
       const cloneLast  = origSlides[total - 1].cloneNode(true);
       track.appendChild(cloneFirst);
       track.insertBefore(cloneLast, track.firstChild);
 
       state[id] = { current: 1, total, isTransitioning: false };
-      setModalPosition(id, 1, false);
+
+      // Position instantly at slide 1 (no animation)
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${slideWidth(id)}px)`;
+
       updateModalActive(id);
       buildModalDots(id);
     }
 
     function slideWidth(id) {
       const track = document.getElementById('track-' + id);
+      // Use second child (first real slide, after clone of last)
       return track.children[1].offsetWidth + 20;
     }
 
@@ -443,7 +439,7 @@
     }
 
     function openProject(id) {
-      initCarousel(id);
+      initCarousel(id); // always reinit so it starts at slide 1
       document.getElementById('modal-' + id).classList.add('open');
       document.body.style.overflow = 'hidden';
     }
@@ -453,24 +449,21 @@
       document.body.style.overflow = '';
     }
 
-    // Close on backdrop click
     document.querySelectorAll('.project-modal').forEach(modal => {
       modal.addEventListener('click', e => {
         if (e.target === modal) closeProject(modal.id.replace('modal-', ''));
       });
     });
 
-    // Keyboard navigation
     document.addEventListener('keydown', e => {
       const open = document.querySelector('.project-modal.open');
       if (!open) return;
       const id = open.id.replace('modal-', '');
-      if (e.key === 'Escape')      closeProject(id);
-      if (e.key === 'ArrowRight')  modalMove(id, 1);
-      if (e.key === 'ArrowLeft')   modalMove(id, -1);
+      if (e.key === 'Escape')     closeProject(id);
+      if (e.key === 'ArrowRight') modalMove(id, 1);
+      if (e.key === 'ArrowLeft')  modalMove(id, -1);
     });
 
-    // Scroll to project if arriving via anchor link from index page
     window.addEventListener('load', () => {
       if (window.location.hash) {
         const el = document.querySelector(window.location.hash);

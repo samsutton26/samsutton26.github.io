@@ -21,9 +21,7 @@
       text-transform: uppercase;
     }
 
-    .carousel-section {
-      padding: 20px 0 40px;
-    }
+    .carousel-section { padding: 20px 0 40px; }
 
     .carousel-outer {
       position: relative;
@@ -51,7 +49,6 @@
       opacity: 0.4;
       transform: scale(0.95);
     }
-
     .carousel-slide.active {
       opacity: 1;
       transform: scale(1);
@@ -62,6 +59,7 @@
       width: 100%;
       aspect-ratio: 16/9;
       object-fit: cover;
+      pointer-events: none;
     }
 
     .carousel-placeholder {
@@ -178,26 +176,17 @@
   </div>
 
   <div class="page-content">
-
     <div class="hero">
       <h1>Sam Sutton</h1>
     </div>
 
     <div class="carousel-section">
       <div class="carousel-outer">
-        <button class="carousel-btn prev" onclick="carouselMove(-1)">&#8592;</button>
-        <button class="carousel-btn next" onclick="carouselMove(1)">&#8594;</button>
+        <button class="carousel-btn prev" onclick="manualMove(-1)">&#8592;</button>
+        <button class="carousel-btn next" onclick="manualMove(1)">&#8594;</button>
 
         <div class="carousel-track-wrap">
           <div class="carousel-track" id="carouselTrack">
-
-            <!--
-              Each slide links to a project on portfolio.html.
-              - data-link sets where clicking the active slide goes
-              - Replace carousel-placeholder with your cover image once uploaded
-              - Slide 1 links to project-1 (Portraiture)
-              - Slides 2 & 3 link to project-2 and project-3 (update titles when ready)
-            -->
 
             <div class="carousel-slide" data-link="portfolio.html#project-1">
               <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
@@ -205,13 +194,13 @@
             </div>
 
             <div class="carousel-slide" data-link="portfolio.html#project-2">
-              <div class="carousel-placeholder"><span>Add cover photo</span></div>
-              <div class="carousel-label"><h3>Project Title</h3></div>
+              <img src="Sam Sutton British Columbia 1.jpg" alt="British Columbia">
+              <div class="carousel-label"><h3>British Columbia</h3></div>
             </div>
 
             <div class="carousel-slide" data-link="portfolio.html#project-3">
-              <div class="carousel-placeholder"><span>Add cover photo</span></div>
-              <div class="carousel-label"><h3>Project Title</h3></div>
+              <img src="Sam_Sutton-18.jpg" alt="Kalymnos">
+              <div class="carousel-label"><h3>Kalymnos</h3></div>
             </div>
 
           </div>
@@ -224,7 +213,6 @@
         <a href="portfolio.html" class="view-all">View all projects</a>
       </div>
     </div>
-
   </div>
 
   <footer>
@@ -237,14 +225,14 @@
       document.querySelector('.hamburger').classList.toggle('open');
     }
 
-    // ── Infinite looping carousel ──
+    // ── Infinite looping carousel with 3s autoplay ──
     const track = document.getElementById('carouselTrack');
     const dotsWrap = document.getElementById('carouselDots');
 
     const originalSlides = Array.from(track.children);
     const total = originalSlides.length;
 
-    // Clone last slide before first, first slide after last
+    // Clone last before first, first after last
     const cloneFirst = originalSlides[0].cloneNode(true);
     const cloneLast  = originalSlides[total - 1].cloneNode(true);
     track.appendChild(cloneFirst);
@@ -253,6 +241,7 @@
     const allSlides = Array.from(track.children);
     let current = 1;
     let isTransitioning = false;
+    let autoTimer = null;
 
     function slideWidth() {
       return allSlides[1].offsetWidth + 24;
@@ -275,7 +264,7 @@
       for (let i = 0; i < total; i++) {
         const btn = document.createElement('button');
         btn.className = 'dot' + (i === realIndex ? ' active' : '');
-        btn.onclick = () => goTo(i + 1);
+        btn.onclick = () => { resetAutoplay(); goTo(i + 1); };
         dotsWrap.appendChild(btn);
       }
     }
@@ -302,18 +291,30 @@
       buildDots();
     });
 
-    function carouselMove(dir) {
+    // Autoplay — advances every 3 seconds
+    function startAutoplay() {
+      autoTimer = setInterval(() => {
+        goTo(current + 1);
+      }, 3000);
+    }
+
+    function resetAutoplay() {
+      clearInterval(autoTimer);
+      startAutoplay();
+    }
+
+    function manualMove(dir) {
+      resetAutoplay();
       goTo(current + dir);
     }
 
-    // Clicking active slide follows its data-link
-    // Clicking inactive slide navigates to it
+    // Click: inactive slide = navigate to it; active slide = follow link
     allSlides.forEach((slide, i) => {
       slide.addEventListener('click', () => {
         if (i !== current) {
+          resetAutoplay();
           goTo(i);
         } else {
-          // Get link from the original slide (clones may not have data-link)
           const realIndex = ((current - 1) + total) % total;
           const link = originalSlides[realIndex].dataset.link;
           if (link) location.href = link;
@@ -323,9 +324,11 @@
 
     window.addEventListener('resize', () => setPosition(current, false));
 
+    // Init
     setPosition(current, false);
     updateActive();
     buildDots();
+    startAutoplay();
   </script>
 
 </body>
