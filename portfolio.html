@@ -28,7 +28,6 @@
       overflow: hidden;
       cursor: pointer;
     }
-
     .project-card img {
       display: block;
       width: 100%;
@@ -70,12 +69,12 @@
       color: #fff;
     }
 
-    /* ── Project modal with carousel ── */
+    /* ── Full-screen project modal ── */
     .project-modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.92);
+      background: #000;
       z-index: 300;
       flex-direction: column;
       align-items: center;
@@ -85,9 +84,9 @@
 
     .modal-close {
       position: absolute;
-      top: 20px; right: 24px;
-      font-size: 24px;
-      color: rgba(255,255,255,0.6);
+      top: 18px; right: 22px;
+      font-size: 26px;
+      color: rgba(255,255,255,0.5);
       cursor: pointer;
       background: none;
       border: none;
@@ -105,29 +104,36 @@
       font-size: 11px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.4);
       white-space: nowrap;
     }
 
+    /* Carousel fills nearly the full screen */
     .modal-carousel {
       width: 100%;
-      max-width: 1100px;
-      padding: 0 80px;
-      position: relative;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      padding: 56px 0 48px; /* top: room for title/close; bottom: room for dots */
+      position: relative;
     }
 
     .modal-track-outer {
       width: 100%;
+      flex: 1;
       overflow: hidden;
       position: relative;
+      display: flex;
+      align-items: center;
     }
 
+    /* Neighbours peek in ~10% either side */
     .modal-track-wrap {
+      width: 100%;
       overflow: visible;
-      padding: 0 12%;
+      padding: 0 10%;
     }
 
     .modal-track {
@@ -138,8 +144,11 @@
 
     .modal-slide {
       flex: 0 0 100%;
-      opacity: 0.3;
-      transform: scale(0.93);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.25;
+      transform: scale(0.92);
       transition: opacity 0.4s, transform 0.4s;
       cursor: pointer;
     }
@@ -151,9 +160,9 @@
     .modal-slide img {
       display: block;
       width: 100%;
-      max-height: 70vh;
+      height: 100%;
+      max-height: calc(100vh - 120px);
       object-fit: contain;
-      background: #111;
     }
 
     .modal-btn {
@@ -162,27 +171,34 @@
       transform: translateY(-50%);
       background: none;
       border: none;
-      color: rgba(255,255,255,0.5);
-      font-size: 28px;
+      color: rgba(255,255,255,0.4);
+      font-size: 32px;
       cursor: pointer;
-      padding: 16px 8px;
+      padding: 20px 12px;
       transition: color 0.2s;
       z-index: 5;
     }
     .modal-btn:hover { color: var(--gold); }
-    .modal-btn.prev { left: 0; }
-    .modal-btn.next { right: 0; }
+    .modal-btn.prev { left: 1%; }
+    .modal-btn.next { right: 1%; }
+
+    .modal-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 8px;
+    }
 
     .modal-dots {
       display: flex;
       gap: 8px;
-      margin-top: 20px;
     }
     .modal-dot {
       width: 5px;
       height: 5px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.25);
       border: none;
       cursor: pointer;
       padding: 0;
@@ -191,22 +207,22 @@
     .modal-dot.active { background: var(--gold); }
 
     .modal-counter {
-      margin-top: 10px;
       font-size: 10px;
       letter-spacing: 0.16em;
-      color: rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.3);
       text-transform: uppercase;
     }
 
     @media (max-width: 768px) {
       .page-header { padding: calc(var(--nav-h) + 20px) 24px 20px; }
       .project-grid { grid-template-columns: 1fr 1fr; padding: 12px 24px 40px; }
-      .modal-carousel { padding: 0 48px; }
-      .modal-track-wrap { padding: 0 8%; }
+      .modal-track-wrap { padding: 0 6%; }
+      .modal-btn.prev { left: 0; }
+      .modal-btn.next { right: 0; }
     }
     @media (max-width: 480px) {
       .project-grid { grid-template-columns: 1fr; }
-      .modal-track-wrap { padding: 0 5%; }
+      .modal-track-wrap { padding: 0 4%; }
     }
   </style>
 </head>
@@ -245,13 +261,13 @@
 
       <!-- PROJECT 2: British Columbia -->
       <div class="project-card" id="project-2" onclick="openProject('bc')">
-        <img src="Sam Sutton British Columbia 1.jpg" alt="British Columbia">
+        <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
         <div class="project-info"><h3>British Columbia</h3></div>
       </div>
 
       <!-- PROJECT 3: Kalymnos -->
       <div class="project-card" id="project-3" onclick="openProject('kalymnos')">
-        <img src="Sam_Sutton-18.jpg" alt="Kalymnos">
+        <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
         <div class="project-info"><h3>Kalymnos</h3></div>
       </div>
 
@@ -279,8 +295,10 @@
           </div>
         </div>
       </div>
-      <div class="modal-dots" id="dots-portraiture"></div>
-      <div class="modal-counter" id="counter-portraiture"></div>
+      <div class="modal-footer">
+        <div class="modal-dots" id="dots-portraiture"></div>
+        <div class="modal-counter" id="counter-portraiture"></div>
+      </div>
     </div>
   </div>
 
@@ -303,8 +321,10 @@
           </div>
         </div>
       </div>
-      <div class="modal-dots" id="dots-bc"></div>
-      <div class="modal-counter" id="counter-bc"></div>
+      <div class="modal-footer">
+        <div class="modal-dots" id="dots-bc"></div>
+        <div class="modal-counter" id="counter-bc"></div>
+      </div>
     </div>
   </div>
 
@@ -327,8 +347,10 @@
           </div>
         </div>
       </div>
-      <div class="modal-dots" id="dots-kalymnos"></div>
-      <div class="modal-counter" id="counter-kalymnos"></div>
+      <div class="modal-footer">
+        <div class="modal-dots" id="dots-kalymnos"></div>
+        <div class="modal-counter" id="counter-kalymnos"></div>
+      </div>
     </div>
   </div>
 
@@ -341,13 +363,10 @@
     const state = {};
 
     function initCarousel(id) {
-      // Always reset so first image is always slide 1
       const track = document.getElementById('track-' + id);
 
-      // Remove any previously added clones
-      const existing = state[id];
-      if (existing) {
-        // Remove clones (first and last child added previously)
+      // Remove previously added clones if reinitialising
+      if (state[id]) {
         track.removeChild(track.firstChild);
         track.removeChild(track.lastChild);
       }
@@ -356,7 +375,6 @@
       const total = origSlides.length;
       if (total === 0) return;
 
-      // Add fresh clones for infinite loop
       const cloneFirst = origSlides[0].cloneNode(true);
       const cloneLast  = origSlides[total - 1].cloneNode(true);
       track.appendChild(cloneFirst);
@@ -364,7 +382,6 @@
 
       state[id] = { current: 1, total, isTransitioning: false };
 
-      // Position instantly at slide 1 (no animation)
       track.style.transition = 'none';
       track.style.transform = `translateX(-${slideWidth(id)}px)`;
 
@@ -374,7 +391,6 @@
 
     function slideWidth(id) {
       const track = document.getElementById('track-' + id);
-      // Use second child (first real slide, after clone of last)
       return track.children[1].offsetWidth + 20;
     }
 
@@ -388,13 +404,12 @@
 
     function updateModalActive(id) {
       const track = document.getElementById('track-' + id);
-      const slides = Array.from(track.children);
-      const cur = state[id].current;
-      slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+      Array.from(track.children).forEach((s, i) =>
+        s.classList.toggle('active', i === state[id].current));
     }
 
     function buildModalDots(id) {
-      const dotsEl = document.getElementById('dots-' + id);
+      const dotsEl    = document.getElementById('dots-' + id);
       const counterEl = document.getElementById('counter-' + id);
       const { current, total } = state[id];
       const realIndex = current - 1;
@@ -439,7 +454,7 @@
     }
 
     function openProject(id) {
-      initCarousel(id); // always reinit so it starts at slide 1
+      initCarousel(id);
       document.getElementById('modal-' + id).classList.add('open');
       document.body.style.overflow = 'hidden';
     }

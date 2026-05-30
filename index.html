@@ -8,7 +8,7 @@
   <style>
     .hero {
       height: auto;
-      padding: 28px 24px 20px;
+      padding: 36px 24px 28px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -21,7 +21,7 @@
       text-transform: uppercase;
     }
 
-    .carousel-section { padding: 20px 0 40px; }
+    .carousel-section { padding: 32px 0 60px; }
 
     .carousel-outer {
       position: relative;
@@ -30,12 +30,12 @@
 
     .carousel-track-wrap {
       overflow: visible;
-      padding: 0 15%;
+      padding: 0 18%;
     }
 
     .carousel-track {
       display: flex;
-      gap: 24px;
+      gap: 28px;
       transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       will-change: transform;
     }
@@ -78,7 +78,7 @@
     }
 
     .carousel-label {
-      margin-top: 14px;
+      margin-top: 16px;
       text-align: center;
     }
     .carousel-label h3 {
@@ -107,14 +107,14 @@
       z-index: 10;
     }
     .carousel-btn:hover { color: var(--gold); }
-    .carousel-btn.prev { left: 6%; }
-    .carousel-btn.next { right: 6%; }
+    .carousel-btn.prev { left: 5%; }
+    .carousel-btn.next { right: 5%; }
 
     .carousel-dots {
       display: flex;
       justify-content: center;
       gap: 8px;
-      margin-top: 24px;
+      margin-top: 28px;
     }
     .dot {
       width: 6px;
@@ -130,7 +130,7 @@
 
     .view-all-wrap {
       text-align: center;
-      margin-top: 32px;
+      margin-top: 36px;
     }
     .view-all {
       font-size: 11px;
@@ -145,13 +145,13 @@
     .view-all:hover { color: var(--gold); border-color: var(--gold); }
 
     @media (max-width: 768px) {
-      .carousel-section { padding: 20px 0 32px; }
+      .carousel-section { padding: 24px 0 40px; }
       .carousel-track-wrap { padding: 0 10%; }
       .carousel-btn.prev { left: 2%; }
       .carousel-btn.next { right: 2%; }
     }
     @media (max-width: 480px) {
-      .carousel-track-wrap { padding: 0 8%; }
+      .carousel-track-wrap { padding: 0 6%; }
     }
   </style>
 </head>
@@ -188,18 +188,21 @@
         <div class="carousel-track-wrap">
           <div class="carousel-track" id="carouselTrack">
 
+            <!-- Slide 1: British Columbia (first on index) -->
+            <div class="carousel-slide" data-link="portfolio.html#project-2">
+              <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
+              <div class="carousel-label"><h3>British Columbia</h3></div>
+            </div>
+
+            <!-- Slide 2: Portraiture -->
             <div class="carousel-slide" data-link="portfolio.html#project-1">
               <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
               <div class="carousel-label"><h3>Portraiture</h3></div>
             </div>
 
-            <div class="carousel-slide" data-link="portfolio.html#project-2">
-              <img src="Sam Sutton British Columbia 1.jpg" alt="British Columbia">
-              <div class="carousel-label"><h3>British Columbia</h3></div>
-            </div>
-
+            <!-- Slide 3: Kalymnos -->
             <div class="carousel-slide" data-link="portfolio.html#project-3">
-              <img src="Sam_Sutton-18.jpg" alt="Kalymnos">
+              <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
               <div class="carousel-label"><h3>Kalymnos</h3></div>
             </div>
 
@@ -225,14 +228,12 @@
       document.querySelector('.hamburger').classList.toggle('open');
     }
 
-    // ── Infinite looping carousel with 3s autoplay ──
     const track = document.getElementById('carouselTrack');
     const dotsWrap = document.getElementById('carouselDots');
 
     const originalSlides = Array.from(track.children);
     const total = originalSlides.length;
 
-    // Clone last before first, first after last
     const cloneFirst = originalSlides[0].cloneNode(true);
     const cloneLast  = originalSlides[total - 1].cloneNode(true);
     track.appendChild(cloneFirst);
@@ -244,7 +245,7 @@
     let autoTimer = null;
 
     function slideWidth() {
-      return allSlides[1].offsetWidth + 24;
+      return allSlides[1].offsetWidth + 28; // 28px = gap
     }
 
     function setPosition(index, animate) {
@@ -291,11 +292,8 @@
       buildDots();
     });
 
-    // Autoplay — advances every 3 seconds
     function startAutoplay() {
-      autoTimer = setInterval(() => {
-        goTo(current + 1);
-      }, 3000);
+      autoTimer = setInterval(() => goTo(current + 1), 5000); // 5 seconds
     }
 
     function resetAutoplay() {
@@ -308,7 +306,6 @@
       goTo(current + dir);
     }
 
-    // Click: inactive slide = navigate to it; active slide = follow link
     allSlides.forEach((slide, i) => {
       slide.addEventListener('click', () => {
         if (i !== current) {
@@ -324,7 +321,6 @@
 
     window.addEventListener('resize', () => setPosition(current, false));
 
-    // Init
     setPosition(current, false);
     updateActive();
     buildDots();
