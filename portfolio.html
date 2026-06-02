@@ -18,7 +18,7 @@
 
     .project-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 16px;
       padding: 16px 60px 60px;
     }
@@ -56,18 +56,37 @@
       position: absolute;
       bottom: 0; left: 0; right: 0;
       padding: 40px 18px 16px;
-      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
       opacity: 0;
       transition: opacity 0.3s;
     }
     .project-card:hover .project-info { opacity: 1; }
     .project-info h3 {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: #fff;
+      line-height: 1.4;
     }
+
+    /* Play icon on video cards */
+    .play-overlay {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px; height: 52px;
+      background: rgba(0,0,0,0.4);
+      border: 2px solid rgba(255,255,255,0.6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      pointer-events: none;
+    }
+    .project-card:hover .play-overlay { background: rgba(0,0,0,0.65); }
+    .play-overlay svg { width: 18px; height: 18px; fill: #fff; margin-left: 3px; }
 
     /* ── Full-screen project modal ── */
     .project-modal {
@@ -98,17 +117,20 @@
 
     .modal-title {
       position: absolute;
-      top: 22px;
+      top: 20px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 11px;
-      letter-spacing: 0.2em;
+      font-size: 10px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.4);
       white-space: nowrap;
+      max-width: 70%;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    /* Carousel fills nearly the full screen */
     .modal-carousel {
       width: 100%;
       height: 100%;
@@ -116,7 +138,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 56px 0 48px; /* top: room for title/close; bottom: room for dots */
+      padding: 56px 0 48px;
       position: relative;
     }
 
@@ -129,7 +151,6 @@
       align-items: center;
     }
 
-    /* Neighbours peek in ~10% either side */
     .modal-track-wrap {
       width: 100%;
       overflow: visible;
@@ -160,9 +181,23 @@
     .modal-slide img {
       display: block;
       width: 100%;
-      height: 100%;
       max-height: calc(100vh - 120px);
       object-fit: contain;
+    }
+
+    /* Video embed in modal */
+    .modal-video-wrap {
+      width: 100%;
+      position: relative;
+      padding-bottom: 56.25%;
+      background: #000;
+    }
+    .modal-video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
     }
 
     .modal-btn {
@@ -182,6 +217,10 @@
     .modal-btn.prev { left: 1%; }
     .modal-btn.next { right: 1%; }
 
+    /* Hide prev/next for single-item (video) modals */
+    .modal-track-outer.single .modal-btn { display: none; }
+    .modal-track-outer.single .modal-track-wrap { padding: 0 8%; }
+
     .modal-footer {
       display: flex;
       flex-direction: column;
@@ -190,18 +229,12 @@
       padding-bottom: 8px;
     }
 
-    .modal-dots {
-      display: flex;
-      gap: 8px;
-    }
+    .modal-dots { display: flex; gap: 8px; }
     .modal-dot {
-      width: 5px;
-      height: 5px;
+      width: 5px; height: 5px;
       border-radius: 50%;
       background: rgba(255,255,255,0.25);
-      border: none;
-      cursor: pointer;
-      padding: 0;
+      border: none; cursor: pointer; padding: 0;
       transition: background 0.2s;
     }
     .modal-dot.active { background: var(--gold); }
@@ -217,8 +250,6 @@
       .page-header { padding: calc(var(--nav-h) + 20px) 24px 20px; }
       .project-grid { grid-template-columns: 1fr 1fr; padding: 12px 24px 40px; }
       .modal-track-wrap { padding: 0 6%; }
-      .modal-btn.prev { left: 0; }
-      .modal-btn.next { right: 0; }
     }
     @media (max-width: 480px) {
       .project-grid { grid-template-columns: 1fr; }
@@ -247,28 +278,61 @@
   </div>
 
   <div class="page-content">
-    <div class="page-header">
-      <h1>Portfolio</h1>
-    </div>
+    <div class="page-header"><h1>Portfolio</h1></div>
 
     <div class="project-grid">
 
-      <!-- PROJECT 1: Portraiture -->
+      <!-- 1: Portraiture -->
       <div class="project-card" id="project-1" onclick="openProject('portraiture')">
         <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
         <div class="project-info"><h3>Portraiture</h3></div>
       </div>
 
-      <!-- PROJECT 2: British Columbia -->
+      <!-- 2: British Columbia -->
       <div class="project-card" id="project-2" onclick="openProject('bc')">
         <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
         <div class="project-info"><h3>British Columbia</h3></div>
       </div>
 
-      <!-- PROJECT 3: Kalymnos -->
+      <!-- 3: Kalymnos -->
       <div class="project-card" id="project-3" onclick="openProject('kalymnos')">
         <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
         <div class="project-info"><h3>Kalymnos</h3></div>
+      </div>
+
+      <!-- 4: Roped Taster -->
+      <div class="project-card" id="project-4" onclick="openVideo('ArZC6wkIQrs', 11, 'Short Form Video: Roped Taster at The Climbing Academy')">
+        <img src="https://img.youtube.com/vi/ArZC6wkIQrs/maxresdefault.jpg" alt="Roped Taster">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Short Form Video: Roped Taster at The Climbing Academy</h3></div>
+      </div>
+
+      <!-- 5: Tour of TCA -->
+      <div class="project-card" id="project-5" onclick="openVideo('8lMge4XTrz8', 18, 'Short Form Video: A Tour of The Climbing Academy')">
+        <img src="https://img.youtube.com/vi/8lMge4XTrz8/maxresdefault.jpg" alt="Tour of TCA">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Short Form Video: A Tour of The Climbing Academy</h3></div>
+      </div>
+
+      <!-- 6: Steve and Tracy -->
+      <div class="project-card" id="project-6" onclick="openVideo('cDTk2uuz_wo', 11, 'Interview: Steve and Tracy at TCA The Arc')">
+        <img src="https://img.youtube.com/vi/cDTk2uuz_wo/maxresdefault.jpg" alt="Steve and Tracy">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Interview: Steve and Tracy at TCA The Arc</h3></div>
+      </div>
+
+      <!-- 7: Future Team GB -->
+      <div class="project-card" id="project-7" onclick="openVideo('8jrpZJk9YQc', 43, 'Interview: Future Team GB at The Climbing Academy')">
+        <img src="https://img.youtube.com/vi/8jrpZJk9YQc/maxresdefault.jpg" alt="Future Team GB">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Interview: Future Team GB at The Climbing Academy</h3></div>
+      </div>
+
+      <!-- 8: Come Climbing -->
+      <div class="project-card" id="project-8" onclick="openVideo('GDMG-ZrvYUY', 3, 'Short Form Video: Come Climbing at The Climbing Academy')">
+        <img src="https://img.youtube.com/vi/GDMG-ZrvYUY/maxresdefault.jpg" alt="Come Climbing">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Short Form Video: Come Climbing at The Climbing Academy</h3></div>
       </div>
 
     </div>
@@ -278,7 +342,9 @@
     <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
   </footer>
 
-  <!-- PORTRAITURE MODAL -->
+  <!-- ── PHOTO MODALS ── -->
+
+  <!-- Portraiture -->
   <div class="project-modal" id="modal-portraiture">
     <button class="modal-close" onclick="closeProject('portraiture')">✕</button>
     <span class="modal-title">Portraiture</span>
@@ -302,7 +368,7 @@
     </div>
   </div>
 
-  <!-- BRITISH COLUMBIA MODAL -->
+  <!-- British Columbia -->
   <div class="project-modal" id="modal-bc">
     <button class="modal-close" onclick="closeProject('bc')">✕</button>
     <span class="modal-title">British Columbia</span>
@@ -312,12 +378,12 @@
         <button class="modal-btn next" onclick="modalMove('bc', 1)">&#8594;</button>
         <div class="modal-track-wrap">
           <div class="modal-track" id="track-bc">
-            <div class="modal-slide"><img src="Sam Sutton British Columbia 1.jpg" alt="British Columbia 1"></div>
-            <div class="modal-slide"><img src="Sam Sutton British Columbia 2.jpg" alt="British Columbia 2"></div>
-            <div class="modal-slide"><img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia 3"></div>
-            <div class="modal-slide"><img src="Sam Sutton British Columbia 4.jpg" alt="British Columbia 4"></div>
-            <div class="modal-slide"><img src="Sam Sutton British Columbia 5.jpg" alt="British Columbia 5"></div>
-            <div class="modal-slide"><img src="Sam Sutton British Columbia 6.jpg" alt="British Columbia 6"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 1.jpg" alt="BC 1"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 2.jpg" alt="BC 2"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 3.jpg" alt="BC 3"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 4.jpg" alt="BC 4"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 5.jpg" alt="BC 5"></div>
+            <div class="modal-slide"><img src="Sam Sutton British Columbia 6.jpg" alt="BC 6"></div>
           </div>
         </div>
       </div>
@@ -328,7 +394,7 @@
     </div>
   </div>
 
-  <!-- KALYMNOS MODAL -->
+  <!-- Kalymnos -->
   <div class="project-modal" id="modal-kalymnos">
     <button class="modal-close" onclick="closeProject('kalymnos')">✕</button>
     <span class="modal-title">Kalymnos</span>
@@ -338,12 +404,12 @@
         <button class="modal-btn next" onclick="modalMove('kalymnos', 1)">&#8594;</button>
         <div class="modal-track-wrap">
           <div class="modal-track" id="track-kalymnos">
-            <div class="modal-slide"><img src="Sam_Sutton-18.jpg"       alt="Kalymnos 1"></div>
-            <div class="modal-slide"><img src="Sam_Sutton-4.jpg"        alt="Kalymnos 2"></div>
-            <div class="modal-slide"><img src="Sam_Sutton-6.jpg"        alt="Kalymnos 3"></div>
-            <div class="modal-slide"><img src="Sam_Sutton_Kaly-23.jpg"  alt="Kalymnos 4"></div>
-            <div class="modal-slide"><img src="Sam_Sutton_Kaly-26.jpg"  alt="Kalymnos 5"></div>
-            <div class="modal-slide"><img src="Sam_Sutton_Kaly-39.jpg"  alt="Kalymnos 6"></div>
+            <div class="modal-slide"><img src="Sam_Sutton-18.jpg"      alt="Kalymnos 1"></div>
+            <div class="modal-slide"><img src="Sam_Sutton-4.jpg"       alt="Kalymnos 2"></div>
+            <div class="modal-slide"><img src="Sam_Sutton-6.jpg"       alt="Kalymnos 3"></div>
+            <div class="modal-slide"><img src="Sam_Sutton_Kaly-23.jpg" alt="Kalymnos 4"></div>
+            <div class="modal-slide"><img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos 5"></div>
+            <div class="modal-slide"><img src="Sam_Sutton_Kaly-39.jpg" alt="Kalymnos 6"></div>
           </div>
         </div>
       </div>
@@ -354,37 +420,51 @@
     </div>
   </div>
 
+  <!-- ── VIDEO MODAL (shared, reused for all video projects) ── -->
+  <div class="project-modal" id="modal-video">
+    <button class="modal-close" onclick="closeVideo()">✕</button>
+    <span class="modal-title" id="video-modal-title"></span>
+    <div class="modal-carousel">
+      <div class="modal-track-outer single">
+        <div class="modal-track-wrap">
+          <div class="modal-track">
+            <div class="modal-slide active">
+              <div class="modal-video-wrap" id="videoEmbed"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-counter" id="video-modal-counter">Full Video</div>
+      </div>
+    </div>
+  </div>
+
   <script>
     function toggleMenu() {
       document.getElementById('mobileMenu').classList.toggle('open');
       document.querySelector('.hamburger').classList.toggle('open');
     }
 
+    // ── Photo carousel modals ──
     const state = {};
 
     function initCarousel(id) {
       const track = document.getElementById('track-' + id);
-
-      // Remove previously added clones if reinitialising
       if (state[id]) {
         track.removeChild(track.firstChild);
         track.removeChild(track.lastChild);
       }
-
       const origSlides = Array.from(track.children);
       const total = origSlides.length;
       if (total === 0) return;
-
       const cloneFirst = origSlides[0].cloneNode(true);
       const cloneLast  = origSlides[total - 1].cloneNode(true);
       track.appendChild(cloneFirst);
       track.insertBefore(cloneLast, track.firstChild);
-
       state[id] = { current: 1, total, isTransitioning: false };
-
       track.style.transition = 'none';
       track.style.transform = `translateX(-${slideWidth(id)}px)`;
-
       updateModalActive(id);
       buildModalDots(id);
     }
@@ -430,7 +510,6 @@
       setModalPosition(id, index, animate);
       updateModalActive(id);
       buildModalDots(id);
-
       const track = document.getElementById('track-' + id);
       track.addEventListener('transitionend', function handler() {
         track.removeEventListener('transitionend', handler);
@@ -464,17 +543,43 @@
       document.body.style.overflow = '';
     }
 
+    // ── Video modal ──
+    function openVideo(youtubeId, startSeconds, title) {
+      document.getElementById('video-modal-title').textContent = title;
+      document.getElementById('videoEmbed').innerHTML =
+        `<iframe src="https://www.youtube.com/embed/${youtubeId}?start=${startSeconds}&autoplay=1&rel=0"
+          allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+      document.getElementById('modal-video').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideo() {
+      document.getElementById('modal-video').classList.remove('open');
+      document.getElementById('videoEmbed').innerHTML = ''; // stop playback
+      document.body.style.overflow = '';
+    }
+
+    // Backdrop click closes any modal
     document.querySelectorAll('.project-modal').forEach(modal => {
       modal.addEventListener('click', e => {
-        if (e.target === modal) closeProject(modal.id.replace('modal-', ''));
+        if (e.target !== modal) return;
+        const id = modal.id.replace('modal-', '');
+        if (id === 'video') closeVideo();
+        else closeProject(id);
       });
     });
 
     document.addEventListener('keydown', e => {
-      const open = document.querySelector('.project-modal.open');
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.project-modal.open').forEach(m => {
+          const id = m.id.replace('modal-', '');
+          if (id === 'video') closeVideo();
+          else closeProject(id);
+        });
+      }
+      const open = document.querySelector('.project-modal.open:not(#modal-video)');
       if (!open) return;
       const id = open.id.replace('modal-', '');
-      if (e.key === 'Escape')     closeProject(id);
       if (e.key === 'ArrowRight') modalMove(id, 1);
       if (e.key === 'ArrowLeft')  modalMove(id, -1);
     });

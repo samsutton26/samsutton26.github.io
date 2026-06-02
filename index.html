@@ -62,31 +62,44 @@
       pointer-events: none;
     }
 
-    .carousel-placeholder {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: #e8e8e8;
-      display: flex;
+    /* Play icon overlay on video slides */
+    .video-badge {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px;
+      height: 56px;
+      background: rgba(0,0,0,0.45);
+      border: 2px solid rgba(255,255,255,0.7);
+      border-radius: 50%;
       align-items: center;
       justify-content: center;
+      pointer-events: none;
+      transition: background 0.2s;
     }
-    .carousel-placeholder span {
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #aaa;
+    .carousel-slide.video-slide .video-badge { display: flex; }
+    .carousel-slide.active.video-slide:hover .video-badge { background: rgba(0,0,0,0.65); }
+    .video-badge svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+      margin-left: 3px;
     }
 
     .carousel-label {
       margin-top: 16px;
       text-align: center;
+      padding: 0 4px;
     }
     .carousel-label h3 {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--text);
+      line-height: 1.4;
     }
 
     .carousel-btn {
@@ -188,22 +201,67 @@
         <div class="carousel-track-wrap">
           <div class="carousel-track" id="carouselTrack">
 
-            <!-- Slide 1: British Columbia (first on index) -->
+            <!-- PHOTO: British Columbia -->
             <div class="carousel-slide" data-link="portfolio.html#project-2">
               <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
               <div class="carousel-label"><h3>British Columbia</h3></div>
             </div>
 
-            <!-- Slide 2: Portraiture -->
+            <!-- PHOTO: Portraiture -->
             <div class="carousel-slide" data-link="portfolio.html#project-1">
               <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
               <div class="carousel-label"><h3>Portraiture</h3></div>
             </div>
 
-            <!-- Slide 3: Kalymnos -->
+            <!-- PHOTO: Kalymnos -->
             <div class="carousel-slide" data-link="portfolio.html#project-3">
               <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
               <div class="carousel-label"><h3>Kalymnos</h3></div>
+            </div>
+
+            <!-- VIDEO: Roped Taster (ArZC6wkIQrs, start 11s) -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-4">
+              <img src="https://img.youtube.com/vi/ArZC6wkIQrs/maxresdefault.jpg" alt="Roped Taster">
+              <div class="video-badge">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              </div>
+              <div class="carousel-label"><h3>Short Form Video: Roped Taster at The Climbing Academy</h3></div>
+            </div>
+
+            <!-- VIDEO: Tour of TCA (8lMge4XTrz8, start 18s) -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-5">
+              <img src="https://img.youtube.com/vi/8lMge4XTrz8/maxresdefault.jpg" alt="Tour of TCA">
+              <div class="video-badge">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              </div>
+              <div class="carousel-label"><h3>Short Form Video: A Tour of The Climbing Academy</h3></div>
+            </div>
+
+            <!-- VIDEO: Steve and Tracy (cDTk2uuz_wo, start 11s) -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-6">
+              <img src="https://img.youtube.com/vi/cDTk2uuz_wo/maxresdefault.jpg" alt="Steve and Tracy">
+              <div class="video-badge">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              </div>
+              <div class="carousel-label"><h3>Interview: Steve and Tracy at TCA The Arc</h3></div>
+            </div>
+
+            <!-- VIDEO: Future Team GB (8jrpZJk9YQc, start 43s) -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-7">
+              <img src="https://img.youtube.com/vi/8jrpZJk9YQc/maxresdefault.jpg" alt="Future Team GB">
+              <div class="video-badge">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              </div>
+              <div class="carousel-label"><h3>Interview: Future Team GB at The Climbing Academy</h3></div>
+            </div>
+
+            <!-- VIDEO: Come Climbing (GDMG-ZrvYUY, start 3s) -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-8">
+              <img src="https://img.youtube.com/vi/GDMG-ZrvYUY/maxresdefault.jpg" alt="Come Climbing">
+              <div class="video-badge">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              </div>
+              <div class="carousel-label"><h3>Short Form Video: Come Climbing at The Climbing Academy</h3></div>
             </div>
 
           </div>
@@ -245,7 +303,7 @@
     let autoTimer = null;
 
     function slideWidth() {
-      return allSlides[1].offsetWidth + 28; // 28px = gap
+      return allSlides[1].offsetWidth + 28;
     }
 
     function setPosition(index, animate) {
@@ -293,7 +351,7 @@
     });
 
     function startAutoplay() {
-      autoTimer = setInterval(() => goTo(current + 1), 5000); // 5 seconds
+      autoTimer = setInterval(() => goTo(current + 1), 5000);
     }
 
     function resetAutoplay() {
