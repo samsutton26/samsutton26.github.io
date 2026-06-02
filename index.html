@@ -6,91 +6,97 @@
   <title>Sam Sutton</title>
   <link rel="stylesheet" href="shared.css">
   <style>
+
+    /* ── Page layout: nav + hero + carousel + dots + footer all fit in 100vh ── */
+    body { overflow: hidden; } /* prevent page scroll on index */
+
     .hero {
-      padding: 16px 24px 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 14px 24px 10px;
       text-align: center;
     }
     .hero h1 {
-      font-size: clamp(24px, 4vw, 48px);
+      font-size: clamp(22px, 3.5vw, 44px);
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
-    .carousel-section { padding: 12px 0 20px; }
+    /* ── Carousel ── */
+    .carousel-section {
+      padding: 0 0 8px;
+    }
 
     .carousel-outer {
       position: relative;
       overflow: hidden;
     }
 
+    /* Side peek: 8% either side, leaving 84% for the active slide */
     .carousel-track-wrap {
       overflow: visible;
-      padding: 0 18%;
+      padding: 0 8%;
     }
 
     .carousel-track {
       display: flex;
-      gap: 24px;
+      gap: 16px;
       transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       will-change: transform;
     }
 
-    /* Each slide is a flex column — image on top, label below */
+    /* Each slide is a column: image box + label */
     .carousel-slide {
       flex: 0 0 100%;
       display: flex;
       flex-direction: column;
+      align-items: center;
       cursor: pointer;
       transition: opacity 0.4s, transform 0.4s;
-      opacity: 0.4;
-      transform: scale(0.95);
+      opacity: 0.35;
+      transform: scale(0.96);
     }
     .carousel-slide.active {
       opacity: 1;
       transform: scale(1);
     }
 
-    /* ── Shared image container ──
-       Both landscape and portrait use the SAME height (45vh).
-       Landscape fills width, portrait centres the narrow clip. */
-    .slide-inner {
-      position: relative;
+    /* ── Image box: fixed height, correct aspect ratio per type ── */
+
+    /* Landscape photos: 3/2 ratio, full width of slot */
+    .slide-img.landscape {
       width: 100%;
-      height: 45vh;
+      aspect-ratio: 3 / 2;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: none;
+      position: relative;
     }
-
-    /* Landscape: stretch to fill full width, crop height */
-    .slide-inner.landscape img {
-      display: block;
+    .slide-img.landscape img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-    }
-
-    /* Portrait: let the natural 9/16 width show, crop top/bottom to fill height */
-    .slide-inner.portrait img {
       display: block;
-      height: 100%;
-      width: auto;
-      object-fit: cover;
     }
 
-    /* Play badge inside slide-inner */
+    /* Portrait videos: 9/16 ratio, centred, natural width from the carousel slot height */
+    /* We constrain by max-height so it fits above fold */
+    .slide-img.portrait {
+      /* height driven by max-height; width follows 9/16 ratio */
+      max-height: 52vh;
+      aspect-ratio: 9 / 16;
+      overflow: hidden;
+      position: relative;
+    }
+    .slide-img.portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Play badge */
     .video-badge {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 50px;
-      height: 50px;
+      width: 48px; height: 48px;
       background: rgba(0,0,0,0.4);
       border: 2px solid rgba(255,255,255,0.7);
       border-radius: 50%;
@@ -99,56 +105,54 @@
       justify-content: center;
       pointer-events: none;
     }
-    .video-badge svg {
-      width: 18px; height: 18px;
-      fill: #fff;
-      margin-left: 3px;
-    }
+    .video-badge svg { width: 16px; height: 16px; fill: #fff; margin-left: 3px; }
 
-    /* Label always below the image container */
+    /* Label below image */
     .carousel-label {
-      margin-top: 10px;
+      margin-top: 8px;
       text-align: center;
-      padding: 0 8px;
-      flex-shrink: 0;
+      padding: 0 4px;
+      width: 100%;
     }
     .carousel-label h3 {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text);
       line-height: 1.5;
     }
 
+    /* Prev / Next arrows — vertically centred on image area */
     .carousel-btn {
       position: absolute;
-      top: calc(45vh / 2);
-      transform: translateY(-50%);
+      top: 50%;
+      transform: translateY(-60%); /* slight up to account for label below */
       background: none;
       border: none;
-      width: 44px; height: 44px;
+      width: 40px; height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 20px;
+      font-size: 18px;
       color: var(--text-dim);
       transition: color 0.2s;
       z-index: 10;
     }
     .carousel-btn:hover { color: var(--gold); }
-    .carousel-btn.prev { left: 5%; }
-    .carousel-btn.next { right: 5%; }
+    .carousel-btn.prev { left: 1.5%; }
+    .carousel-btn.next { right: 1.5%; }
 
+    /* Dots */
     .carousel-dots {
       display: flex;
       justify-content: center;
-      gap: 8px;
-      margin-top: 14px;
+      gap: 7px;
+      margin-top: 10px;
     }
     .dot {
-      width: 6px; height: 6px;
+      width: 5px; height: 5px;
       border-radius: 50%;
       background: #ccc;
       cursor: pointer;
@@ -157,33 +161,27 @@
     }
     .dot.active { background: var(--gold); }
 
-    .view-all-wrap {
-      text-align: center;
-      margin-top: 16px;
-    }
+    /* View all */
+    .view-all-wrap { text-align: center; margin-top: 10px; }
     .view-all {
-      font-size: 11px;
-      letter-spacing: 0.18em;
+      font-size: 10px;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--text);
       text-decoration: none;
       border-bottom: 1px solid #ccc;
-      padding-bottom: 3px;
+      padding-bottom: 2px;
       transition: color 0.2s, border-color 0.2s;
     }
     .view-all:hover { color: var(--gold); border-color: var(--gold); }
 
     @media (max-width: 768px) {
-      .carousel-track-wrap { padding: 0 10%; }
-      .carousel-btn.prev { left: 2%; }
-      .carousel-btn.next { right: 2%; }
-      .slide-inner { height: 35vh; }
-      .carousel-btn { top: calc(35vh / 2); }
+      .carousel-track-wrap { padding: 0 6%; }
+      .slide-img.portrait { max-height: 44vh; }
     }
     @media (max-width: 480px) {
-      .carousel-track-wrap { padding: 0 6%; }
-      .slide-inner { height: 28vh; }
-      .carousel-btn { top: calc(28vh / 2); }
+      .carousel-track-wrap { padding: 0 5%; }
+      .slide-img.portrait { max-height: 38vh; }
     }
   </style>
 </head>
@@ -208,9 +206,7 @@
   </div>
 
   <div class="page-content">
-    <div class="hero">
-      <h1>Sam Sutton</h1>
-    </div>
+    <div class="hero"><h1>Sam Sutton</h1></div>
 
     <div class="carousel-section">
       <div class="carousel-outer">
@@ -220,69 +216,69 @@
         <div class="carousel-track-wrap">
           <div class="carousel-track" id="carouselTrack">
 
-            <!-- PHOTO: British Columbia -->
+            <!-- PHOTO: British Columbia (3:2) -->
             <div class="carousel-slide" data-link="portfolio.html#project-2">
-              <div class="slide-inner landscape">
+              <div class="slide-img landscape">
                 <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
               </div>
               <div class="carousel-label"><h3>British Columbia</h3></div>
             </div>
 
-            <!-- PHOTO: Portraiture -->
+            <!-- PHOTO: Portraiture (3:2) -->
             <div class="carousel-slide" data-link="portfolio.html#project-1">
-              <div class="slide-inner landscape">
+              <div class="slide-img landscape">
                 <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
               </div>
               <div class="carousel-label"><h3>Portraiture</h3></div>
             </div>
 
-            <!-- PHOTO: Kalymnos -->
+            <!-- PHOTO: Kalymnos (3:2) -->
             <div class="carousel-slide" data-link="portfolio.html#project-3">
-              <div class="slide-inner landscape">
+              <div class="slide-img landscape">
                 <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
               </div>
               <div class="carousel-label"><h3>Kalymnos</h3></div>
             </div>
 
-            <!-- VIDEO: Roped Taster -->
+            <!-- VIDEO: Roped Taster (9:16) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-4">
-              <div class="slide-inner portrait">
+              <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/ArZC6wkIQrs/maxresdefault.jpg" alt="Roped Taster">
                 <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
               <div class="carousel-label"><h3>Short Form Video: Roped Taster at The Climbing Academy</h3></div>
             </div>
 
-            <!-- VIDEO: Tour of TCA -->
+            <!-- VIDEO: Tour of TCA (9:16) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-5">
-              <div class="slide-inner portrait">
+              <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/8lMge4XTrz8/maxresdefault.jpg" alt="Tour of TCA">
                 <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
               <div class="carousel-label"><h3>Short Form Video: A Tour of The Climbing Academy</h3></div>
             </div>
 
-            <!-- VIDEO: Steve and Tracy -->
+            <!-- VIDEO: Steve and Tracy (9:16) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-6">
-              <div class="slide-inner portrait">
+              <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/cDTk2uuz_wo/maxresdefault.jpg" alt="Steve and Tracy">
                 <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
               <div class="carousel-label"><h3>Interview: Steve and Tracy at TCA The Arc</h3></div>
             </div>
 
-            <!-- VIDEO: Future Team GB -->
+            <!-- VIDEO: Future Team GB (9:16) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-7">
-              <div class="slide-inner portrait">
+              <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/8jrpZJk9YQc/maxresdefault.jpg" alt="Future Team GB">
                 <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
               <div class="carousel-label"><h3>Interview: Future Team GB at The Climbing Academy</h3></div>
             </div>
 
-            <!-- VIDEO: Come Climbing -->
+            <!-- VIDEO: Come Climbing (9:16) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-8">
-              <div class="slide-inner portrait">
+              <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/GDMG-ZrvYUY/maxresdefault.jpg" alt="Come Climbing">
                 <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
@@ -294,7 +290,6 @@
       </div>
 
       <div class="carousel-dots" id="carouselDots"></div>
-
       <div class="view-all-wrap">
         <a href="portfolio.html" class="view-all">View all projects</a>
       </div>
@@ -328,7 +323,7 @@
     let autoTimer = null;
 
     function slideWidth() {
-      return allSlides[1].offsetWidth + 24;
+      return allSlides[1].offsetWidth + 16;
     }
 
     function setPosition(index, animate) {
@@ -378,12 +373,10 @@
     function startAutoplay() {
       autoTimer = setInterval(() => goTo(current + 1), 5000);
     }
-
     function resetAutoplay() {
       clearInterval(autoTimer);
       startAutoplay();
     }
-
     function manualMove(dir) {
       resetAutoplay();
       goTo(current + dir);
