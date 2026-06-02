@@ -57,9 +57,53 @@
     .carousel-slide img {
       display: block;
       width: 100%;
-      aspect-ratio: 16/9;
+      aspect-ratio: 4/3;
       object-fit: cover;
       pointer-events: none;
+    }
+
+    /* Video slides — portrait crop, centred in a fixed-height container */
+    .carousel-slide.video-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+    }
+
+    .carousel-slide.video-slide img {
+      width: auto;          /* don't stretch to full width */
+      height: 100%;         /* fill the height of the container */
+      aspect-ratio: 9/16;   /* portrait */
+      object-fit: cover;
+      max-width: 100%;
+    }
+
+    /* Fixed height container so portrait slides match photo slide height */
+    .slide-inner {
+      position: relative;
+      width: 100%;
+    }
+
+    .slide-inner.portrait {
+      display: flex;
+      justify-content: center;
+      background: #fff;
+      height: 480px; /* fixed height — matches ~4/3 ratio at typical widths */
+    }
+
+    .slide-inner.portrait img {
+      width: auto;
+      height: 100%;
+      aspect-ratio: 9/16;
+      object-fit: cover;
+      display: block;
+    }
+
+    .slide-inner.landscape img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
     }
 
     /* Play icon overlay on video slides */
@@ -86,6 +130,13 @@
       height: 20px;
       fill: #fff;
       margin-left: 3px;
+    }
+
+    @media (max-width: 768px) {
+      .slide-inner.portrait { height: 320px; }
+    }
+    @media (max-width: 480px) {
+      .slide-inner.portrait { height: 240px; }
     }
 
     .carousel-label {
@@ -203,25 +254,25 @@
 
             <!-- PHOTO: British Columbia -->
             <div class="carousel-slide" data-link="portfolio.html#project-2">
-              <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
+              <div class="slide-inner landscape"><img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia"></div>
               <div class="carousel-label"><h3>British Columbia</h3></div>
             </div>
 
             <!-- PHOTO: Portraiture -->
             <div class="carousel-slide" data-link="portfolio.html#project-1">
-              <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
+              <div class="slide-inner landscape"><img src="Sam Sutton Portraiture 1.webp" alt="Portraiture"></div>
               <div class="carousel-label"><h3>Portraiture</h3></div>
             </div>
 
             <!-- PHOTO: Kalymnos -->
             <div class="carousel-slide" data-link="portfolio.html#project-3">
-              <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
+              <div class="slide-inner landscape"><img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos"></div>
               <div class="carousel-label"><h3>Kalymnos</h3></div>
             </div>
 
             <!-- VIDEO: Roped Taster (ArZC6wkIQrs, start 11s) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-4">
-              <img src="https://img.youtube.com/vi/ArZC6wkIQrs/maxresdefault.jpg" alt="Roped Taster">
+              <div class="slide-inner portrait"><img src="https://img.youtube.com/vi/ArZC6wkIQrs/maxresdefault.jpg" alt="Roped Taster"></div>
               <div class="video-badge">
                 <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
               </div>
@@ -230,7 +281,7 @@
 
             <!-- VIDEO: Tour of TCA (8lMge4XTrz8, start 18s) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-5">
-              <img src="https://img.youtube.com/vi/8lMge4XTrz8/maxresdefault.jpg" alt="Tour of TCA">
+              <div class="slide-inner portrait"><img src="https://img.youtube.com/vi/8lMge4XTrz8/maxresdefault.jpg" alt="Tour of TCA"></div>
               <div class="video-badge">
                 <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
               </div>
@@ -239,7 +290,7 @@
 
             <!-- VIDEO: Steve and Tracy (cDTk2uuz_wo, start 11s) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-6">
-              <img src="https://img.youtube.com/vi/cDTk2uuz_wo/maxresdefault.jpg" alt="Steve and Tracy">
+              <div class="slide-inner portrait"><img src="https://img.youtube.com/vi/cDTk2uuz_wo/maxresdefault.jpg" alt="Steve and Tracy"></div>
               <div class="video-badge">
                 <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
               </div>
@@ -248,7 +299,7 @@
 
             <!-- VIDEO: Future Team GB (8jrpZJk9YQc, start 43s) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-7">
-              <img src="https://img.youtube.com/vi/8jrpZJk9YQc/maxresdefault.jpg" alt="Future Team GB">
+              <div class="slide-inner portrait"><img src="https://img.youtube.com/vi/8jrpZJk9YQc/maxresdefault.jpg" alt="Future Team GB"></div>
               <div class="video-badge">
                 <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
               </div>
@@ -257,7 +308,7 @@
 
             <!-- VIDEO: Come Climbing (GDMG-ZrvYUY, start 3s) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-8">
-              <img src="https://img.youtube.com/vi/GDMG-ZrvYUY/maxresdefault.jpg" alt="Come Climbing">
+              <div class="slide-inner portrait"><img src="https://img.youtube.com/vi/GDMG-ZrvYUY/maxresdefault.jpg" alt="Come Climbing"></div>
               <div class="video-badge">
                 <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
               </div>
