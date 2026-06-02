@@ -68,19 +68,20 @@
       object-fit: cover;
     }
 
-    /* Portrait videos — fixed height, centred, clips sides */
+    /* Portrait videos — same height as landscape (3/2), portrait crop centred */
     .slide-inner.portrait {
       display: flex;
       justify-content: center;
-      align-items: stretch;
-      background: #f0f0f0;
-      height: 320px;
+      align-items: center;
+      background: none;
+      aspect-ratio: 3/2;
+      overflow: hidden;
     }
 
     .slide-inner.portrait img {
       display: block;
-      width: auto;
       height: 100%;
+      width: auto;
       aspect-ratio: 9/16;
       object-fit: cover;
     }
@@ -180,11 +181,9 @@
       .carousel-track-wrap { padding: 0 10%; }
       .carousel-btn.prev { left: 2%; }
       .carousel-btn.next { right: 2%; }
-      .slide-inner.portrait { height: 240px; }
     }
     @media (max-width: 480px) {
       .carousel-track-wrap { padding: 0 6%; }
-      .slide-inner.portrait { height: 200px; }
     }
   </style>
 </head>
