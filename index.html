@@ -7,30 +7,26 @@
   <link rel="stylesheet" href="shared.css">
   <style>
 
-    /* ── Page layout: nav + hero + carousel + dots + footer all fit in 100vh ── */
-    body { overflow: hidden; } /* prevent page scroll on index */
+    body { overflow: hidden; }
 
     .hero {
-      padding: 14px 24px 10px;
+      padding: 12px 24px 8px;
       text-align: center;
     }
     .hero h1 {
-      font-size: clamp(22px, 3.5vw, 44px);
+      font-size: clamp(20px, 3vw, 40px);
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
-    /* ── Carousel ── */
-    .carousel-section {
-      padding: 0 0 8px;
-    }
+    .carousel-section { padding: 8px 0 0; }
 
     .carousel-outer {
       position: relative;
       overflow: hidden;
     }
 
-    /* Side peek: 8% either side, leaving 84% for the active slide */
+    /* 8% peek either side */
     .carousel-track-wrap {
       overflow: visible;
       padding: 0 8%;
@@ -43,7 +39,6 @@
       will-change: transform;
     }
 
-    /* Each slide is a column: image box + label */
     .carousel-slide {
       flex: 0 0 100%;
       display: flex;
@@ -59,14 +54,23 @@
       transform: scale(1);
     }
 
-    /* ── Image box: fixed height, correct aspect ratio per type ── */
+    /*
+      Single unified image box — 50vh tall for all slides.
+      Photos: fill full width, crop height to fit.
+      Videos: natural 9:16 width from the 50vh height, centred.
+    */
+    .slide-img {
+      height: 50vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-    /* Landscape photos: 3/2 ratio, full width of slot */
+    /* Photos fill full width */
     .slide-img.landscape {
       width: 100%;
-      aspect-ratio: 3 / 2;
-      overflow: hidden;
-      position: relative;
     }
     .slide-img.landscape img {
       width: 100%;
@@ -75,14 +79,9 @@
       display: block;
     }
 
-    /* Portrait videos: 9/16 ratio, centred, natural width from the carousel slot height */
-    /* We constrain by max-height so it fits above fold */
+    /* Videos: natural portrait width = 50vh * (9/16) ≈ 28vw */
     .slide-img.portrait {
-      /* height driven by max-height; width follows 9/16 ratio */
-      max-height: 52vh;
-      aspect-ratio: 9 / 16;
-      overflow: hidden;
-      position: relative;
+      width: calc(50vh * 9 / 16);
     }
     .slide-img.portrait img {
       width: 100%;
@@ -91,7 +90,6 @@
       display: block;
     }
 
-    /* Play badge */
     .video-badge {
       position: absolute;
       top: 50%; left: 50%;
@@ -107,7 +105,6 @@
     }
     .video-badge svg { width: 16px; height: 16px; fill: #fff; margin-left: 3px; }
 
-    /* Label below image */
     .carousel-label {
       margin-top: 8px;
       text-align: center;
@@ -123,11 +120,10 @@
       line-height: 1.5;
     }
 
-    /* Prev / Next arrows — vertically centred on image area */
     .carousel-btn {
       position: absolute;
-      top: 50%;
-      transform: translateY(-60%); /* slight up to account for label below */
+      top: calc(25vh);
+      transform: translateY(-50%);
       background: none;
       border: none;
       width: 40px; height: 40px;
@@ -144,12 +140,11 @@
     .carousel-btn.prev { left: 1.5%; }
     .carousel-btn.next { right: 1.5%; }
 
-    /* Dots */
     .carousel-dots {
       display: flex;
       justify-content: center;
       gap: 7px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
     .dot {
       width: 5px; height: 5px;
@@ -161,8 +156,7 @@
     }
     .dot.active { background: var(--gold); }
 
-    /* View all */
-    .view-all-wrap { text-align: center; margin-top: 10px; }
+    .view-all-wrap { text-align: center; margin-top: 8px; }
     .view-all {
       font-size: 10px;
       letter-spacing: 0.16em;
@@ -175,13 +169,19 @@
     }
     .view-all:hover { color: var(--gold); border-color: var(--gold); }
 
+    /* Footer stays pinned at bottom */
+    footer { margin-top: 8px; }
+
     @media (max-width: 768px) {
       .carousel-track-wrap { padding: 0 6%; }
-      .slide-img.portrait { max-height: 44vh; }
+      .slide-img { height: 40vh; }
+      .slide-img.portrait { width: calc(40vh * 9 / 16); }
+      .carousel-btn { top: 20vh; }
     }
     @media (max-width: 480px) {
-      .carousel-track-wrap { padding: 0 5%; }
-      .slide-img.portrait { max-height: 38vh; }
+      .slide-img { height: 34vh; }
+      .slide-img.portrait { width: calc(34vh * 9 / 16); }
+      .carousel-btn { top: 17vh; }
     }
   </style>
 </head>
@@ -216,7 +216,6 @@
         <div class="carousel-track-wrap">
           <div class="carousel-track" id="carouselTrack">
 
-            <!-- PHOTO: British Columbia (3:2) -->
             <div class="carousel-slide" data-link="portfolio.html#project-2">
               <div class="slide-img landscape">
                 <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
@@ -224,7 +223,6 @@
               <div class="carousel-label"><h3>British Columbia</h3></div>
             </div>
 
-            <!-- PHOTO: Portraiture (3:2) -->
             <div class="carousel-slide" data-link="portfolio.html#project-1">
               <div class="slide-img landscape">
                 <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
@@ -232,7 +230,6 @@
               <div class="carousel-label"><h3>Portraiture</h3></div>
             </div>
 
-            <!-- PHOTO: Kalymnos (3:2) -->
             <div class="carousel-slide" data-link="portfolio.html#project-3">
               <div class="slide-img landscape">
                 <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
@@ -240,7 +237,6 @@
               <div class="carousel-label"><h3>Kalymnos</h3></div>
             </div>
 
-            <!-- VIDEO: Roped Taster (9:16) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-4">
               <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/ArZC6wkIQrs/maxresdefault.jpg" alt="Roped Taster">
@@ -249,7 +245,6 @@
               <div class="carousel-label"><h3>Short Form Video: Roped Taster at The Climbing Academy</h3></div>
             </div>
 
-            <!-- VIDEO: Tour of TCA (9:16) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-5">
               <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/8lMge4XTrz8/maxresdefault.jpg" alt="Tour of TCA">
@@ -258,7 +253,6 @@
               <div class="carousel-label"><h3>Short Form Video: A Tour of The Climbing Academy</h3></div>
             </div>
 
-            <!-- VIDEO: Steve and Tracy (9:16) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-6">
               <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/cDTk2uuz_wo/maxresdefault.jpg" alt="Steve and Tracy">
@@ -267,7 +261,6 @@
               <div class="carousel-label"><h3>Interview: Steve and Tracy at TCA The Arc</h3></div>
             </div>
 
-            <!-- VIDEO: Future Team GB (9:16) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-7">
               <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/8jrpZJk9YQc/maxresdefault.jpg" alt="Future Team GB">
@@ -276,7 +269,6 @@
               <div class="carousel-label"><h3>Interview: Future Team GB at The Climbing Academy</h3></div>
             </div>
 
-            <!-- VIDEO: Come Climbing (9:16) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-8">
               <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/GDMG-ZrvYUY/maxresdefault.jpg" alt="Come Climbing">
@@ -308,7 +300,6 @@
 
     const track = document.getElementById('carouselTrack');
     const dotsWrap = document.getElementById('carouselDots');
-
     const originalSlides = Array.from(track.children);
     const total = originalSlides.length;
 
@@ -322,9 +313,7 @@
     let isTransitioning = false;
     let autoTimer = null;
 
-    function slideWidth() {
-      return allSlides[1].offsetWidth + 16;
-    }
+    function slideWidth() { return allSlides[1].offsetWidth + 16; }
 
     function setPosition(index, animate) {
       track.style.transition = animate
@@ -359,35 +348,20 @@
 
     track.addEventListener('transitionend', () => {
       isTransitioning = false;
-      if (current === 0) {
-        current = total;
-        setPosition(current, false);
-      } else if (current === total + 1) {
-        current = 1;
-        setPosition(current, false);
-      }
+      if (current === 0) { current = total; setPosition(current, false); }
+      else if (current === total + 1) { current = 1; setPosition(current, false); }
       updateActive();
       buildDots();
     });
 
-    function startAutoplay() {
-      autoTimer = setInterval(() => goTo(current + 1), 5000);
-    }
-    function resetAutoplay() {
-      clearInterval(autoTimer);
-      startAutoplay();
-    }
-    function manualMove(dir) {
-      resetAutoplay();
-      goTo(current + dir);
-    }
+    function startAutoplay() { autoTimer = setInterval(() => goTo(current + 1), 5000); }
+    function resetAutoplay() { clearInterval(autoTimer); startAutoplay(); }
+    function manualMove(dir) { resetAutoplay(); goTo(current + dir); }
 
     allSlides.forEach((slide, i) => {
       slide.addEventListener('click', () => {
-        if (i !== current) {
-          resetAutoplay();
-          goTo(i);
-        } else {
+        if (i !== current) { resetAutoplay(); goTo(i); }
+        else {
           const realIndex = ((current - 1) + total) % total;
           const link = originalSlides[realIndex].dataset.link;
           if (link) location.href = link;
@@ -396,7 +370,6 @@
     });
 
     window.addEventListener('resize', () => setPosition(current, false));
-
     setPosition(current, false);
     updateActive();
     buildDots();
