@@ -7,21 +7,19 @@
   <link rel="stylesheet" href="shared.css">
   <style>
     .hero {
-      height: auto;
-      padding: 36px 24px 28px;
+      padding: 20px 24px 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
       text-align: center;
     }
     .hero h1 {
-      font-size: clamp(32px, 6vw, 64px);
+      font-size: clamp(28px, 5vw, 56px);
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
-    .carousel-section { padding: 32px 0 60px; }
+    .carousel-section { padding: 16px 0 24px; }
 
     .carousel-outer {
       position: relative;
@@ -35,16 +33,17 @@
 
     .carousel-track {
       display: flex;
-      gap: 28px;
+      gap: 24px;
       transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       will-change: transform;
     }
 
+    /* Each slide is a flex column so label always sits below the image */
     .carousel-slide {
       flex: 0 0 100%;
-      position: relative;
+      display: flex;
+      flex-direction: column;
       cursor: pointer;
-      overflow: hidden;
       transition: opacity 0.4s, transform 0.4s;
       opacity: 0.4;
       transform: scale(0.95);
@@ -54,118 +53,88 @@
       transform: scale(1);
     }
 
-    .carousel-slide img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 4/3;
-      object-fit: cover;
-      pointer-events: none;
-    }
-
-    /* Video slides — portrait crop, centred in a fixed-height container */
-    .carousel-slide.video-slide {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff;
-    }
-
-    .carousel-slide.video-slide img {
-      width: auto;          /* don't stretch to full width */
-      height: 100%;         /* fill the height of the container */
-      aspect-ratio: 9/16;   /* portrait */
-      object-fit: cover;
-      max-width: 100%;
-    }
-
-    /* Fixed height container so portrait slides match photo slide height */
+    /* ── Image containers ── */
     .slide-inner {
       position: relative;
       width: 100%;
+      overflow: hidden;
     }
 
+    /* Landscape photos */
+    .slide-inner.landscape img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 3/2;
+      object-fit: cover;
+    }
+
+    /* Portrait videos — fixed height, centred, clips sides */
     .slide-inner.portrait {
       display: flex;
       justify-content: center;
-      background: #fff;
-      height: 480px; /* fixed height — matches ~4/3 ratio at typical widths */
+      align-items: stretch;
+      background: #f0f0f0;
+      height: 320px;
     }
 
     .slide-inner.portrait img {
+      display: block;
       width: auto;
       height: 100%;
       aspect-ratio: 9/16;
       object-fit: cover;
-      display: block;
     }
 
-    .slide-inner.landscape img {
-      width: 100%;
-      aspect-ratio: 4/3;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* Play icon overlay on video slides */
+    /* Play badge — positioned over the slide-inner */
     .video-badge {
-      display: none;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 56px;
-      height: 56px;
-      background: rgba(0,0,0,0.45);
+      width: 50px;
+      height: 50px;
+      background: rgba(0,0,0,0.4);
       border: 2px solid rgba(255,255,255,0.7);
       border-radius: 50%;
+      display: flex;
       align-items: center;
       justify-content: center;
       pointer-events: none;
-      transition: background 0.2s;
     }
-    .carousel-slide.video-slide .video-badge { display: flex; }
-    .carousel-slide.active.video-slide:hover .video-badge { background: rgba(0,0,0,0.65); }
     .video-badge svg {
-      width: 20px;
-      height: 20px;
+      width: 18px; height: 18px;
       fill: #fff;
       margin-left: 3px;
     }
 
-    @media (max-width: 768px) {
-      .slide-inner.portrait { height: 320px; }
-    }
-    @media (max-width: 480px) {
-      .slide-inner.portrait { height: 240px; }
-    }
-
+    /* Label always below image */
     .carousel-label {
-      margin-top: 16px;
+      margin-top: 12px;
       text-align: center;
-      padding: 0 4px;
+      padding: 0 8px;
+      flex-shrink: 0;
     }
     .carousel-label h3 {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--text);
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
     .carousel-btn {
       position: absolute;
-      top: calc(50% - 30px);
+      top: calc(50% - 24px);
       transform: translateY(-50%);
       background: none;
       border: none;
-      width: 48px;
-      height: 48px;
+      width: 44px; height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 22px;
+      font-size: 20px;
       color: var(--text-dim);
       transition: color 0.2s;
       z-index: 10;
@@ -178,23 +147,21 @@
       display: flex;
       justify-content: center;
       gap: 8px;
-      margin-top: 28px;
+      margin-top: 18px;
     }
     .dot {
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: #ccc;
       cursor: pointer;
       transition: background 0.2s;
-      border: none;
-      padding: 0;
+      border: none; padding: 0;
     }
     .dot.active { background: var(--gold); }
 
     .view-all-wrap {
       text-align: center;
-      margin-top: 36px;
+      margin-top: 20px;
     }
     .view-all {
       font-size: 11px;
@@ -209,13 +176,15 @@
     .view-all:hover { color: var(--gold); border-color: var(--gold); }
 
     @media (max-width: 768px) {
-      .carousel-section { padding: 24px 0 40px; }
+      .carousel-section { padding: 12px 0 20px; }
       .carousel-track-wrap { padding: 0 10%; }
       .carousel-btn.prev { left: 2%; }
       .carousel-btn.next { right: 2%; }
+      .slide-inner.portrait { height: 240px; }
     }
     @media (max-width: 480px) {
       .carousel-track-wrap { padding: 0 6%; }
+      .slide-inner.portrait { height: 200px; }
     }
   </style>
 </head>
@@ -254,63 +223,69 @@
 
             <!-- PHOTO: British Columbia -->
             <div class="carousel-slide" data-link="portfolio.html#project-2">
-              <div class="slide-inner landscape"><img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia"></div>
+              <div class="slide-inner landscape">
+                <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
+              </div>
               <div class="carousel-label"><h3>British Columbia</h3></div>
             </div>
 
             <!-- PHOTO: Portraiture -->
             <div class="carousel-slide" data-link="portfolio.html#project-1">
-              <div class="slide-inner landscape"><img src="Sam Sutton Portraiture 1.webp" alt="Portraiture"></div>
+              <div class="slide-inner landscape">
+                <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
+              </div>
               <div class="carousel-label"><h3>Portraiture</h3></div>
             </div>
 
             <!-- PHOTO: Kalymnos -->
             <div class="carousel-slide" data-link="portfolio.html#project-3">
-              <div class="slide-inner landscape"><img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos"></div>
+              <div class="slide-inner landscape">
+                <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
+              </div>
               <div class="carousel-label"><h3>Kalymnos</h3></div>
             </div>
 
-            <!-- VIDEO: Roped Taster (ArZC6wkIQrs, start 11s) -->
+            <!-- VIDEO: Roped Taster (start 11s on index) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-4">
-              <div class="slide-inner portrait"><img src="https://img.youtube.com/vi/ArZC6wkIQrs/maxresdefault.jpg" alt="Roped Taster"></div>
-              <div class="video-badge">
-                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              <div class="slide-inner portrait">
+                <img src="https://img.youtube.com/vi/ArZC6wkIQrs/maxresdefault.jpg" alt="Roped Taster">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
               <div class="carousel-label"><h3>Short Form Video: Roped Taster at The Climbing Academy</h3></div>
             </div>
 
-            <!-- VIDEO: Tour of TCA (8lMge4XTrz8, start 18s) -->
+            <!-- VIDEO: Tour of TCA (start 18s on index) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-5">
-              <div class="slide-inner portrait"><img src="https://img.youtube.com/vi/8lMge4XTrz8/maxresdefault.jpg" alt="Tour of TCA"></div>
-              <div class="video-badge">
-                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              <div class="slide-inner portrait">
+                <img src="https://img.youtube.com/vi/8lMge4XTrz8/maxresdefault.jpg" alt="Tour of TCA">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
               <div class="carousel-label"><h3>Short Form Video: A Tour of The Climbing Academy</h3></div>
             </div>
 
-            <!-- VIDEO: Steve and Tracy (cDTk2uuz_wo, start 11s) -->
+            <!-- VIDEO: Steve and Tracy (start 11s on index) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-6">
-              <div class="slide-inner portrait"><img src="https://img.youtube.com/vi/cDTk2uuz_wo/maxresdefault.jpg" alt="Steve and Tracy"></div>
-              <div class="video-badge">
-                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              <div class="slide-inner portrait">
+                <img src="https://img.youtube.com/vi/cDTk2uuz_wo/maxresdefault.jpg" alt="Steve and Tracy">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
               <div class="carousel-label"><h3>Interview: Steve and Tracy at TCA The Arc</h3></div>
             </div>
 
-            <!-- VIDEO: Future Team GB (8jrpZJk9YQc, start 43s) -->
+            <!-- VIDEO: Future Team GB (start 43s on index) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-7">
-              <div class="slide-inner portrait"><img src="https://img.youtube.com/vi/8jrpZJk9YQc/maxresdefault.jpg" alt="Future Team GB"></div>
-              <div class="video-badge">
-                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              <div class="slide-inner portrait">
+                <img src="https://img.youtube.com/vi/8jrpZJk9YQc/maxresdefault.jpg" alt="Future Team GB">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
               <div class="carousel-label"><h3>Interview: Future Team GB at The Climbing Academy</h3></div>
             </div>
 
-            <!-- VIDEO: Come Climbing (GDMG-ZrvYUY, start 3s) -->
+            <!-- VIDEO: Come Climbing (start 3s on index) -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-8">
-              <div class="slide-inner portrait"><img src="https://img.youtube.com/vi/GDMG-ZrvYUY/maxresdefault.jpg" alt="Come Climbing"></div>
-              <div class="video-badge">
-                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              <div class="slide-inner portrait">
+                <img src="https://img.youtube.com/vi/GDMG-ZrvYUY/maxresdefault.jpg" alt="Come Climbing">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
               <div class="carousel-label"><h3>Short Form Video: Come Climbing at The Climbing Academy</h3></div>
             </div>
@@ -354,7 +329,7 @@
     let autoTimer = null;
 
     function slideWidth() {
-      return allSlides[1].offsetWidth + 28;
+      return allSlides[1].offsetWidth + 24;
     }
 
     function setPosition(index, animate) {
