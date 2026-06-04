@@ -6,7 +6,6 @@
   <title>Contact — Sam Sutton</title>
   <link rel="stylesheet" href="shared.css">
   <style>
-    /* Full viewport layout — everything fits without scrolling */
     .contact-page {
       min-height: 100vh;
       display: flex;
@@ -17,7 +16,7 @@
       flex: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      max-width: 900px;
+      max-width: 960px;
       width: 100%;
       margin: 0 auto;
       padding: calc(var(--nav-h) + 32px) 40px 32px;
@@ -25,43 +24,103 @@
       align-items: start;
     }
 
-    /* Left column — heading + social */
+    /* Left column */
     .contact-left h1 {
       font-size: clamp(28px, 4vw, 48px);
       letter-spacing: 0.1em;
       text-transform: uppercase;
       line-height: 1.1;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .contact-left p {
       font-size: 13px;
       line-height: 1.8;
       color: var(--text-dim);
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
-
-    .contact-links { display: flex; flex-direction: column; gap: 10px; }
-    .contact-links a {
-      font-size: 13px;
-      color: var(--text);
-      text-decoration: none;
-      transition: color 0.2s;
-      letter-spacing: 0.02em;
-    }
-    .contact-links a:hover { color: var(--gold); }
 
     .contact-links-label {
       font-size: 9px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--text-dim);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
-    /* Right column — form */
-    .contact-right {}
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 36px;
+    }
+    .contact-links a {
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-links a:hover { color: var(--gold); }
 
+    /* Mailing list */
+    .mailing-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .mailing-intro {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .mailing-form {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 2px;
+    }
+
+    .mailing-form input[type="email"] {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      padding: 6px 0;
+    }
+    .mailing-form input[type="email"]::placeholder { color: #ccc; }
+
+    .mailing-form button {
+      background: none;
+      border: none;
+      font-family: Arial, sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 6px 0 6px 12px;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .mailing-form button:hover { color: var(--gold); }
+
+    .mailing-note {
+      font-size: 10px;
+      color: #bbb;
+      margin-top: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Right column — contact form */
     .field {
       display: flex;
       flex-direction: column;
@@ -89,10 +148,8 @@
       resize: none;
       width: 100%;
     }
-
     .field input::placeholder,
     .field textarea::placeholder { color: #ccc; }
-
     .field textarea { min-height: 70px; }
 
     .submit-btn {
@@ -147,7 +204,7 @@
   <div class="contact-page">
     <div class="contact-wrap">
 
-      <!-- Left: heading + links -->
+      <!-- Left: links + mailing list -->
       <div class="contact-left">
         <h1>Get in<br>touch</h1>
         <p>Available for commercial, editorial, and personal projects.</p>
@@ -158,38 +215,82 @@
           <a href="https://youtube.com/YOUR_CHANNEL" target="_blank" rel="noopener">YouTube</a>
           <a href="mailto:samsutton26@gmail.com">samsutton26@gmail.com</a>
         </div>
+
+        <!-- MAILING LIST -->
+        <p class="mailing-label">Mailing list</p>
+        <p class="mailing-intro">Sign up to hear about new work and projects.</p>
+
+        <!--
+          ═══════════════════════════════════════════════════
+          MAILCHIMP SETUP (free, up to 500 subscribers):
+
+          1. Go to mailchimp.com and create a free account
+          2. Go to Audience → Signup forms → Embedded forms
+          3. Click "Condensed" form style
+          4. Copy ONLY the action URL from the form code —
+             it looks like:
+             https://xxxxx.us1.list-manage.com/subscribe/post?u=XXXX&id=XXXX
+          5. Paste that URL as the value of the form's
+             action attribute below, replacing YOUR_MAILCHIMP_URL
+          6. Leave everything else as-is
+
+          Mailchimp handles confirmation emails, unsubscribes,
+          and GDPR compliance automatically.
+          ═══════════════════════════════════════════════════
+        -->
+        <form
+          class="mailing-form"
+          action="YOUR_MAILCHIMP_URL"
+          method="post"
+          target="_blank"
+          onsubmit="return validateMailingForm(this)"
+        >
+          <!-- Mailchimp requires this hidden field -->
+          <input type="hidden" name="tags" value="website-signup">
+          <!-- Anti-bot honeypot — leave blank -->
+          <div style="position:absolute;left:-5000px" aria-hidden="true">
+            <input type="text" name="b_placeholder" tabindex="-1" value="">
+          </div>
+          <input
+            type="email"
+            name="EMAIL"
+            placeholder="your@email.com"
+            required
+          >
+          <button type="submit">Subscribe</button>
+        </form>
+        <p class="mailing-note">No spam. Unsubscribe any time.</p>
       </div>
 
-      <!-- Right: form -->
+      <!-- Right: contact form -->
       <div class="contact-right">
         <!--
-          CONTACT FORM SETUP (free):
-          1. Go to https://formspree.io and sign up
-          2. Create a new form — you get an ID like "xabc1234"
-          3. Replace YOUR_FORMSPREE_ID below with that ID
+          FORMSPREE SETUP:
+          1. Go to formspree.io and sign up (free)
+          2. Create a new form — copy your ID (e.g. xabc1234)
+          3. Replace YOUR_FORMSPREE_ID below
         -->
-        <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" onsubmit="handleSubmit(event)">
-
+        <form
+          action="https://formspree.io/f/YOUR_FORMSPREE_ID"
+          method="POST"
+          onsubmit="handleSubmit(event)"
+        >
           <div class="field">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" placeholder="Your name" required>
           </div>
-
           <div class="field">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="your@email.com" required>
           </div>
-
           <div class="field">
             <label for="subject">Subject</label>
             <input type="text" id="subject" name="subject" placeholder="What's this about?">
           </div>
-
           <div class="field">
             <label for="message">Message</label>
             <textarea id="message" name="message" placeholder="Tell me about your project…" required></textarea>
           </div>
-
           <button type="submit" class="submit-btn" id="submitBtn">Send message</button>
         </form>
       </div>
@@ -208,14 +309,22 @@
     }
 
     function handleSubmit(e) {
-      if (document.querySelector('form').action.includes('YOUR_FORMSPREE_ID')) {
+      if (document.querySelector('form[action*="YOUR_FORMSPREE_ID"]')) {
         e.preventDefault();
-        alert('Set up Formspree to enable this form.\nSee the comment in contact.html for instructions.');
+        alert('Set up Formspree first.\nSee the comment in contact.html.');
         return;
       }
       const btn = document.getElementById('submitBtn');
       btn.textContent = 'Sending…';
       btn.disabled = true;
+    }
+
+    function validateMailingForm(form) {
+      if (form.action === 'YOUR_MAILCHIMP_URL') {
+        alert('Set up Mailchimp first.\nSee the comment in contact.html.');
+        return false;
+      }
+      return true;
     }
   </script>
 
