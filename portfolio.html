@@ -18,7 +18,7 @@
 
     .project-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 16px;
       padding: 16px 60px 60px;
     }
@@ -62,7 +62,7 @@
     }
     .project-card:hover .project-info { opacity: 1; }
     .project-info h3 {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -70,7 +70,6 @@
       line-height: 1.4;
     }
 
-    /* Play icon on video cards */
     .play-overlay {
       position: absolute;
       top: 50%; left: 50%;
@@ -79,16 +78,14 @@
       background: rgba(0,0,0,0.4);
       border: 2px solid rgba(255,255,255,0.6);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       transition: background 0.2s;
       pointer-events: none;
     }
     .project-card:hover .play-overlay { background: rgba(0,0,0,0.65); }
     .play-overlay svg { width: 18px; height: 18px; fill: #fff; margin-left: 3px; }
 
-    /* ── Full-screen project modal ── */
+    /* Full-screen modal */
     .project-modal {
       display: none;
       position: fixed;
@@ -107,18 +104,15 @@
       font-size: 26px;
       color: rgba(255,255,255,0.5);
       cursor: pointer;
-      background: none;
-      border: none;
-      line-height: 1;
-      z-index: 10;
+      background: none; border: none;
+      line-height: 1; z-index: 10;
       transition: color 0.2s;
     }
     .modal-close:hover { color: #fff; }
 
     .modal-title {
       position: absolute;
-      top: 20px;
-      left: 50%;
+      top: 20px; left: 50%;
       transform: translateX(-50%);
       font-size: 10px;
       letter-spacing: 0.18em;
@@ -132,23 +126,18 @@
     }
 
     .modal-carousel {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       padding: 56px 0 48px;
       position: relative;
     }
 
     .modal-track-outer {
-      width: 100%;
-      flex: 1;
+      width: 100%; flex: 1;
       overflow: hidden;
       position: relative;
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
     }
 
     .modal-track-wrap {
@@ -165,18 +154,13 @@
 
     .modal-slide {
       flex: 0 0 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       opacity: 0.25;
       transform: scale(0.92);
       transition: opacity 0.4s, transform 0.4s;
       cursor: pointer;
     }
-    .modal-slide.active {
-      opacity: 1;
-      transform: scale(1);
-    }
+    .modal-slide.active { opacity: 1; transform: scale(1); }
 
     .modal-slide img {
       display: block;
@@ -185,7 +169,6 @@
       object-fit: contain;
     }
 
-    /* Video embed in modal */
     .modal-video-wrap {
       width: 100%;
       position: relative;
@@ -194,54 +177,41 @@
     }
     .modal-video-wrap iframe {
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0; width: 100%; height: 100%;
       border: none;
     }
 
     .modal-btn {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
+      top: 50%; transform: translateY(-50%);
+      background: none; border: none;
       color: rgba(255,255,255,0.4);
-      font-size: 32px;
-      cursor: pointer;
+      font-size: 32px; cursor: pointer;
       padding: 20px 12px;
-      transition: color 0.2s;
-      z-index: 5;
+      transition: color 0.2s; z-index: 5;
     }
     .modal-btn:hover { color: var(--gold); }
     .modal-btn.prev { left: 1%; }
     .modal-btn.next { right: 1%; }
 
-    /* Hide prev/next for single-item (video) modals */
     .modal-track-outer.single .modal-btn { display: none; }
     .modal-track-outer.single .modal-track-wrap { padding: 0 8%; }
 
     .modal-footer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 10px;
       padding-bottom: 8px;
     }
-
     .modal-dots { display: flex; gap: 8px; }
     .modal-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
+      width: 5px; height: 5px; border-radius: 50%;
       background: rgba(255,255,255,0.25);
       border: none; cursor: pointer; padding: 0;
       transition: background 0.2s;
     }
     .modal-dot.active { background: var(--gold); }
-
     .modal-counter {
-      font-size: 10px;
-      letter-spacing: 0.16em;
+      font-size: 10px; letter-spacing: 0.16em;
       color: rgba(255,255,255,0.3);
       text-transform: uppercase;
     }
@@ -253,7 +223,6 @@
     }
     @media (max-width: 480px) {
       .project-grid { grid-template-columns: 1fr; }
-      .modal-track-wrap { padding: 0 4%; }
     }
   </style>
 </head>
@@ -335,6 +304,76 @@
         <div class="project-info"><h3>Short Form Video: Come Climbing at The Climbing Academy</h3></div>
       </div>
 
+      <!-- 9: Boulder Socials -->
+      <div class="project-card" id="project-9" onclick="openVideo('rMcL1nqbOeQ', 0, 'Short Form Video: Boulder Socials at The Climbing Academy')">
+        <img src="https://img.youtube.com/vi/rMcL1nqbOeQ/maxresdefault.jpg" alt="Boulder Socials">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Short Form Video: Boulder Socials at The Climbing Academy</h3></div>
+      </div>
+
+      <!-- 10: An Evening Climbing at TCA The Church -->
+      <div class="project-card" id="project-10" onclick="openVideo('qKsZtPNXlsk', 0, 'Short Form Video: An Evening Climbing at TCA The Church')">
+        <img src="https://img.youtube.com/vi/qKsZtPNXlsk/maxresdefault.jpg" alt="An Evening Climbing at TCA The Church">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Short Form Video: An Evening Climbing at TCA The Church</h3></div>
+      </div>
+
+      <!-- 11: 3 Boards 1 Centre -->
+      <div class="project-card" id="project-11" onclick="openVideo('zRDDOPaZcs8', 0, 'Short Form Video: 3 Boards, 1 Centre — TCA The Mothership')">
+        <img src="https://img.youtube.com/vi/zRDDOPaZcs8/maxresdefault.jpg" alt="3 Boards 1 Centre">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Short Form Video: 3 Boards, 1 Centre — TCA The Mothership</h3></div>
+      </div>
+
+      <!-- 12: She Rocks -->
+      <div class="project-card" id="project-12" onclick="openVideo('XJRxEEwy8sE', 0, 'She Rocks at TCA The Mothership')">
+        <img src="https://img.youtube.com/vi/XJRxEEwy8sE/maxresdefault.jpg" alt="She Rocks at TCA The Mothership">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>She Rocks at TCA The Mothership</h3></div>
+      </div>
+
+      <!-- 13: Welcome to TCA The Arc -->
+      <div class="project-card" id="project-13" onclick="openVideo('YRNNgsdqXi8', 0, 'Welcome to TCA The Arc')">
+        <img src="https://img.youtube.com/vi/YRNNgsdqXi8/maxresdefault.jpg" alt="Welcome to TCA The Arc">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Welcome to TCA The Arc</h3></div>
+      </div>
+
+      <!-- 14: Welcome to The Mothership -->
+      <div class="project-card" id="project-14" onclick="openVideo('KAsj2G9NGvk', 0, 'Welcome to The Mothership')">
+        <img src="https://img.youtube.com/vi/KAsj2G9NGvk/maxresdefault.jpg" alt="Welcome to The Mothership">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Welcome to The Mothership</h3></div>
+      </div>
+
+      <!-- 15: Welcome to The Church -->
+      <div class="project-card" id="project-15" onclick="openVideo('UDPXhulsHxs', 0, 'Welcome to The Church')">
+        <img src="https://img.youtube.com/vi/UDPXhulsHxs/maxresdefault.jpg" alt="Welcome to The Church">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Welcome to The Church</h3></div>
+      </div>
+
+      <!-- 16: Better Belaying: Friction Only -->
+      <div class="project-card" id="project-16" onclick="openVideo('8SxPepDYSXw', 0, 'Better Belaying: Friction Only Devices at TCA')">
+        <img src="https://img.youtube.com/vi/8SxPepDYSXw/maxresdefault.jpg" alt="Better Belaying: Friction Only">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Better Belaying: Friction Only Devices at TCA</h3></div>
+      </div>
+
+      <!-- 17: Better Auto Belay Use -->
+      <div class="project-card" id="project-17" onclick="openVideo('lHH5TP7vFcI', 0, 'Better Auto Belay Use at TCA')">
+        <img src="https://img.youtube.com/vi/lHH5TP7vFcI/maxresdefault.jpg" alt="Better Auto Belay Use at TCA">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Better Auto Belay Use at TCA</h3></div>
+      </div>
+
+      <!-- 18: Better Belaying: Geometric Devices -->
+      <div class="project-card" id="project-18" onclick="openVideo('oK1bNwWjNeM', 0, 'Better Belaying: Geometric Devices at TCA')">
+        <img src="https://img.youtube.com/vi/oK1bNwWjNeM/maxresdefault.jpg" alt="Better Belaying: Geometric Devices">
+        <div class="play-overlay"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <div class="project-info"><h3>Better Belaying: Geometric Devices at TCA</h3></div>
+      </div>
+
     </div>
   </div>
 
@@ -342,9 +381,7 @@
     <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
   </footer>
 
-  <!-- ── PHOTO MODALS ── -->
-
-  <!-- Portraiture -->
+  <!-- PHOTO MODALS -->
   <div class="project-modal" id="modal-portraiture">
     <button class="modal-close" onclick="closeProject('portraiture')">✕</button>
     <span class="modal-title">Portraiture</span>
@@ -368,7 +405,6 @@
     </div>
   </div>
 
-  <!-- British Columbia -->
   <div class="project-modal" id="modal-bc">
     <button class="modal-close" onclick="closeProject('bc')">✕</button>
     <span class="modal-title">British Columbia</span>
@@ -394,7 +430,6 @@
     </div>
   </div>
 
-  <!-- Kalymnos -->
   <div class="project-modal" id="modal-kalymnos">
     <button class="modal-close" onclick="closeProject('kalymnos')">✕</button>
     <span class="modal-title">Kalymnos</span>
@@ -420,7 +455,7 @@
     </div>
   </div>
 
-  <!-- ── VIDEO MODAL (shared, reused for all video projects) ── -->
+  <!-- SHARED VIDEO MODAL -->
   <div class="project-modal" id="modal-video">
     <button class="modal-close" onclick="closeVideo()">✕</button>
     <span class="modal-title" id="video-modal-title"></span>
@@ -435,7 +470,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <div class="modal-counter" id="video-modal-counter">Full Video</div>
+        <div class="modal-counter">Full Video</div>
       </div>
     </div>
   </div>
@@ -446,7 +481,6 @@
       document.querySelector('.hamburger').classList.toggle('open');
     }
 
-    // ── Photo carousel modals ──
     const state = {};
 
     function initCarousel(id) {
@@ -543,7 +577,6 @@
       document.body.style.overflow = '';
     }
 
-    // ── Video modal ──
     function openVideo(youtubeId, startSeconds, title) {
       document.getElementById('video-modal-title').textContent = title;
       document.getElementById('videoEmbed').innerHTML =
@@ -555,11 +588,10 @@
 
     function closeVideo() {
       document.getElementById('modal-video').classList.remove('open');
-      document.getElementById('videoEmbed').innerHTML = ''; // stop playback
+      document.getElementById('videoEmbed').innerHTML = '';
       document.body.style.overflow = '';
     }
 
-    // Backdrop click closes any modal
     document.querySelectorAll('.project-modal').forEach(modal => {
       modal.addEventListener('click', e => {
         if (e.target !== modal) return;

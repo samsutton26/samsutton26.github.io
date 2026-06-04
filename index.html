@@ -6,19 +6,14 @@
   <title>Sam Sutton</title>
   <link rel="stylesheet" href="shared.css">
   <style>
-
-    /* Lock page — no scrolling */
     html, body { height: 100%; overflow: hidden; }
 
-    /* Stack everything in a column that fills exactly the viewport */
     .page-wrapper {
       height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* Nav is fixed so doesn't participate in flex flow —
-       we add a spacer the same height as the nav */
     .nav-spacer { height: var(--nav-h); flex-shrink: 0; }
 
     .hero {
@@ -32,7 +27,6 @@
       text-transform: uppercase;
     }
 
-    /* Carousel takes all remaining vertical space */
     .carousel-section {
       flex: 1;
       display: flex;
@@ -69,18 +63,8 @@
       opacity: 0.35;
       transform: scale(0.96);
     }
-    .carousel-slide.active {
-      opacity: 1;
-      transform: scale(1);
-    }
+    .carousel-slide.active { opacity: 1; transform: scale(1); }
 
-    /*
-      Image box: 3:2 for photos (landscape), 3:2 container for videos too
-      but videos are centred portrait strips inside.
-      Width is constrained so the 3:2 box never exceeds available height.
-      We calculate max-width from available height using JS, but set a
-      safe CSS fallback using vh.
-    */
     .slide-img {
       width: 100%;
       aspect-ratio: 3 / 2;
@@ -93,18 +77,13 @@
     }
 
     .slide-img.landscape img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
     }
 
-    /* Portrait video: centred in the 3:2 box, natural width from full height */
     .slide-img.portrait img {
-      height: 100%;
-      width: auto;
-      display: block;
-      object-fit: cover;
+      height: 100%; width: auto;
+      display: block; object-fit: cover;
     }
 
     .video-badge {
@@ -115,9 +94,7 @@
       background: rgba(0,0,0,0.4);
       border: 2px solid rgba(255,255,255,0.7);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       pointer-events: none;
     }
     .video-badge svg { width: 16px; height: 16px; fill: #fff; margin-left: 3px; }
@@ -130,29 +107,20 @@
       width: 100%;
     }
     .carousel-label h3 {
-      font-size: 10px;
-      font-weight: 700;
+      font-size: 10px; font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--text);
-      line-height: 1.4;
+      color: var(--text); line-height: 1.4;
     }
 
     .carousel-btn {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
+      top: 50%; transform: translateY(-50%);
+      background: none; border: none;
       width: 40px; height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 18px;
-      color: var(--text-dim);
-      transition: color 0.2s;
-      z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 18px;
+      color: var(--text-dim); transition: color 0.2s; z-index: 10;
     }
     .carousel-btn:hover { color: var(--gold); }
     .carousel-btn.prev { left: 1.5%; }
@@ -160,52 +128,31 @@
 
     .carousel-bottom {
       flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
       padding: 6px 0 0;
     }
 
-    .carousel-dots {
-      display: flex;
-      justify-content: center;
-      gap: 7px;
-    }
+    .carousel-dots { display: flex; justify-content: center; gap: 7px; }
     .dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: #ccc;
-      cursor: pointer;
-      transition: background 0.2s;
-      border: none; padding: 0;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #ccc; cursor: pointer;
+      transition: background 0.2s; border: none; padding: 0;
     }
     .dot.active { background: var(--gold); }
 
     .view-all {
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--text);
-      text-decoration: none;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 2px;
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--text); text-decoration: none;
+      border-bottom: 1px solid #ccc; padding-bottom: 2px;
       transition: color 0.2s, border-color 0.2s;
     }
     .view-all:hover { color: var(--gold); border-color: var(--gold); }
 
-    footer {
-      flex-shrink: 0;
-      margin-top: 0;
-      padding: 8px 36px;
-    }
+    footer { flex-shrink: 0; margin-top: 0; padding: 8px 36px; }
 
-    @media (max-width: 768px) {
-      .carousel-track-wrap { padding: 0 6%; }
-    }
-    @media (max-width: 480px) {
-      .carousel-track-wrap { padding: 0 5%; }
-    }
+    @media (max-width: 768px) { .carousel-track-wrap { padding: 0 6%; } }
+    @media (max-width: 480px) { .carousel-track-wrap { padding: 0 5%; } }
   </style>
 </head>
 <body>
@@ -230,7 +177,6 @@
 
   <div class="page-wrapper">
     <div class="nav-spacer"></div>
-
     <div class="hero"><h1>Sam Sutton</h1></div>
 
     <div class="carousel-section">
@@ -241,20 +187,16 @@
         <div class="carousel-track-wrap">
           <div class="carousel-track" id="carouselTrack">
 
-            <div class="carousel-slide" data-link="portfolio.html#project-2">
-              <div class="slide-img landscape">
-                <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
+            <!-- Slide 1: Better Belaying: Friction Only Devices -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-9">
+              <div class="slide-img portrait">
+                <img src="https://img.youtube.com/vi/8SxPepDYSXw/maxresdefault.jpg" alt="Better Belaying: Friction Only">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
-              <div class="carousel-label"><h3>British Columbia</h3></div>
+              <div class="carousel-label"><h3>Better Belaying: Friction Only Devices at TCA</h3></div>
             </div>
 
-            <div class="carousel-slide" data-link="portfolio.html#project-1">
-              <div class="slide-img landscape">
-                <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
-              </div>
-              <div class="carousel-label"><h3>Portraiture</h3></div>
-            </div>
-
+            <!-- Slide 2: Kalymnos (photo) -->
             <div class="carousel-slide" data-link="portfolio.html#project-3">
               <div class="slide-img landscape">
                 <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
@@ -262,6 +204,16 @@
               <div class="carousel-label"><h3>Kalymnos</h3></div>
             </div>
 
+            <!-- Slide 3: Welcome to TCA The Arc -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-13">
+              <div class="slide-img portrait">
+                <img src="https://img.youtube.com/vi/YRNNgsdqXi8/maxresdefault.jpg" alt="Welcome to TCA The Arc">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              </div>
+              <div class="carousel-label"><h3>Welcome to TCA The Arc</h3></div>
+            </div>
+
+            <!-- Slide 4: Roped Taster -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-4">
               <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/ArZC6wkIQrs/maxresdefault.jpg" alt="Roped Taster">
@@ -270,6 +222,33 @@
               <div class="carousel-label"><h3>Short Form Video: Roped Taster at The Climbing Academy</h3></div>
             </div>
 
+            <!-- Slide 5: British Columbia (photo) -->
+            <div class="carousel-slide" data-link="portfolio.html#project-2">
+              <div class="slide-img landscape">
+                <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
+              </div>
+              <div class="carousel-label"><h3>British Columbia</h3></div>
+            </div>
+
+            <!-- Slide 6: She Rocks at TCA The Mothership -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-12">
+              <div class="slide-img portrait">
+                <img src="https://img.youtube.com/vi/XJRxEEwy8sE/maxresdefault.jpg" alt="She Rocks at TCA The Mothership">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              </div>
+              <div class="carousel-label"><h3>She Rocks at TCA The Mothership</h3></div>
+            </div>
+
+            <!-- Slide 7: Better Auto Belay -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-10">
+              <div class="slide-img portrait">
+                <img src="https://img.youtube.com/vi/lHH5TP7vFcI/maxresdefault.jpg" alt="Better Auto Belay Use at TCA">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              </div>
+              <div class="carousel-label"><h3>Better Auto Belay Use at TCA</h3></div>
+            </div>
+
+            <!-- Slide 8: Tour of TCA -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-5">
               <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/8lMge4XTrz8/maxresdefault.jpg" alt="Tour of TCA">
@@ -278,6 +257,42 @@
               <div class="carousel-label"><h3>Short Form Video: A Tour of The Climbing Academy</h3></div>
             </div>
 
+            <!-- Slide 9: Welcome to The Mothership -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-14">
+              <div class="slide-img portrait">
+                <img src="https://img.youtube.com/vi/KAsj2G9NGvk/maxresdefault.jpg" alt="Welcome to The Mothership">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              </div>
+              <div class="carousel-label"><h3>Welcome to The Mothership</h3></div>
+            </div>
+
+            <!-- Slide 10: Portraiture (photo) -->
+            <div class="carousel-slide" data-link="portfolio.html#project-1">
+              <div class="slide-img landscape">
+                <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
+              </div>
+              <div class="carousel-label"><h3>Portraiture</h3></div>
+            </div>
+
+            <!-- Slide 11: Boulder Socials -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-9">
+              <div class="slide-img portrait">
+                <img src="https://img.youtube.com/vi/rMcL1nqbOeQ/maxresdefault.jpg" alt="Boulder Socials">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              </div>
+              <div class="carousel-label"><h3>Short Form Video: Boulder Socials at The Climbing Academy</h3></div>
+            </div>
+
+            <!-- Slide 12: Better Belaying: Geometric Devices -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-11">
+              <div class="slide-img portrait">
+                <img src="https://img.youtube.com/vi/oK1bNwWjNeM/maxresdefault.jpg" alt="Better Belaying: Geometric Devices">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              </div>
+              <div class="carousel-label"><h3>Better Belaying: Geometric Devices at TCA</h3></div>
+            </div>
+
+            <!-- Slide 13: Steve and Tracy -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-6">
               <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/cDTk2uuz_wo/maxresdefault.jpg" alt="Steve and Tracy">
@@ -286,6 +301,16 @@
               <div class="carousel-label"><h3>Interview: Steve and Tracy at TCA The Arc</h3></div>
             </div>
 
+            <!-- Slide 14: An Evening Climbing at TCA The Church -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-10">
+              <div class="slide-img portrait">
+                <img src="https://img.youtube.com/vi/qKsZtPNXlsk/maxresdefault.jpg" alt="An Evening Climbing at TCA The Church">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              </div>
+              <div class="carousel-label"><h3>Short Form Video: An Evening Climbing at TCA The Church</h3></div>
+            </div>
+
+            <!-- Slide 15: Future Team GB -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-7">
               <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/8jrpZJk9YQc/maxresdefault.jpg" alt="Future Team GB">
@@ -294,12 +319,31 @@
               <div class="carousel-label"><h3>Interview: Future Team GB at The Climbing Academy</h3></div>
             </div>
 
+            <!-- Slide 16: Welcome to The Church -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-15">
+              <div class="slide-img portrait">
+                <img src="https://img.youtube.com/vi/UDPXhulsHxs/maxresdefault.jpg" alt="Welcome to The Church">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              </div>
+              <div class="carousel-label"><h3>Welcome to The Church</h3></div>
+            </div>
+
+            <!-- Slide 17: Come Climbing -->
             <div class="carousel-slide video-slide" data-link="portfolio.html#project-8">
               <div class="slide-img portrait">
                 <img src="https://img.youtube.com/vi/GDMG-ZrvYUY/maxresdefault.jpg" alt="Come Climbing">
                 <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </div>
               <div class="carousel-label"><h3>Short Form Video: Come Climbing at The Climbing Academy</h3></div>
+            </div>
+
+            <!-- Slide 18: 3 Boards 1 Centre -->
+            <div class="carousel-slide video-slide" data-link="portfolio.html#project-11">
+              <div class="slide-img portrait">
+                <img src="https://img.youtube.com/vi/zRDDOPaZcs8/maxresdefault.jpg" alt="3 Boards 1 Centre">
+                <div class="video-badge"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              </div>
+              <div class="carousel-label"><h3>Short Form Video: 3 Boards, 1 Centre — TCA The Mothership</h3></div>
             </div>
 
           </div>
@@ -323,47 +367,31 @@
       document.querySelector('.hamburger').classList.toggle('open');
     }
 
-    // ── Size the carousel to fit exactly within available space ──
     function sizeCarousel() {
       const outer = document.getElementById('carouselOuter');
       const section = outer.closest('.carousel-section');
       const bottom = section.querySelector('.carousel-bottom');
-
-      // Available height for the image = section height minus bottom UI
       const sectionH = section.clientHeight;
       const bottomH  = bottom.offsetHeight;
-      const labelH   = 32; // approx label + margin
-      const gap      = 12; // padding-top of section
+      const labelH   = 32;
+      const gap      = 12;
       const availH   = sectionH - bottomH - labelH - gap;
-
-      // At 3:2, width = height * 1.5. Track-wrap is 84% of outer (100% - 8% - 8%)
       const outerW   = outer.clientWidth;
-      const slotW    = outerW * 0.84;       // 84% after 8% padding each side
-      const maxW     = availH * (3 / 2);    // width if constrained by height
-
-      // Use whichever is smaller — slotW or maxW
-      const imgW = Math.min(slotW, maxW);
-      const imgH = imgW / (3 / 2);
-
-      // Apply to all slide-img boxes
+      const slotW    = outerW * 0.84;
+      const maxW     = availH * (3 / 2);
+      const imgW     = Math.min(slotW, maxW);
+      const imgH     = imgW / (3 / 2);
       document.querySelectorAll('.slide-img').forEach(el => {
-        el.style.width  = imgW + 'px';
-        el.style.height = imgH + 'px';
-        // Remove aspect-ratio so our explicit w/h takes over
+        el.style.width      = imgW + 'px';
+        el.style.height     = imgH + 'px';
         el.style.aspectRatio = 'unset';
       });
-
-      // Outer height = image + label
       outer.style.height = (imgH + labelH) + 'px';
     }
 
     window.addEventListener('resize', () => { sizeCarousel(); setPosition(current, false); });
-    window.addEventListener('load', sizeCarousel);
-    // Also run immediately
-    sizeCarousel();
 
-    // ── Carousel logic ──
-    const track = document.getElementById('carouselTrack');
+    const track    = document.getElementById('carouselTrack');
     const dotsWrap = document.getElementById('carouselDots');
     const originalSlides = Array.from(track.children);
     const total = originalSlides.length;
@@ -434,7 +462,6 @@
       });
     });
 
-    // Run sizing after fonts/images settle, then init carousel
     setTimeout(() => {
       sizeCarousel();
       setPosition(current, false);

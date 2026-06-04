@@ -240,7 +240,7 @@
         -->
         <form
           class="mailing-form"
-          action="YOUR_MAILCHIMP_URL"
+          action="https://theclimbingacademy.us14.list-manage.com/subscribe/post?u=10851cb4709883c4c19244ca7&amp;id=75c54fc6c9&amp;f_id=0063c2e1f0"
           method="post"
           target="_blank"
           onsubmit="return validateMailingForm(this)"
@@ -249,7 +249,7 @@
           <input type="hidden" name="tags" value="website-signup">
           <!-- Anti-bot honeypot — leave blank -->
           <div style="position:absolute;left:-5000px" aria-hidden="true">
-            <input type="text" name="b_placeholder" tabindex="-1" value="">
+            <input type="text" name="b_10851cb4709883c4c19244ca7_75c54fc6c9" tabindex="-1" value="">
           </div>
           <input
             type="email"
@@ -320,10 +320,6 @@
     }
 
     function validateMailingForm(form) {
-      if (form.action === 'YOUR_MAILCHIMP_URL') {
-        alert('Set up Mailchimp first.\nSee the comment in contact.html.');
-        return false;
-      }
       return true;
     }
   </script>
