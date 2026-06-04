@@ -7,26 +7,46 @@
   <link rel="stylesheet" href="shared.css">
   <style>
 
-    body { overflow: hidden; }
+    /* Lock page — no scrolling */
+    html, body { height: 100%; overflow: hidden; }
+
+    /* Stack everything in a column that fills exactly the viewport */
+    .page-wrapper {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Nav is fixed so doesn't participate in flex flow —
+       we add a spacer the same height as the nav */
+    .nav-spacer { height: var(--nav-h); flex-shrink: 0; }
 
     .hero {
-      padding: 12px 24px 8px;
+      flex-shrink: 0;
+      padding: 10px 24px 6px;
       text-align: center;
     }
     .hero h1 {
-      font-size: clamp(20px, 3vw, 40px);
+      font-size: clamp(18px, 2.8vw, 38px);
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
-    .carousel-section { padding: 8px 0 0; }
+    /* Carousel takes all remaining vertical space */
+    .carousel-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      padding: 6px 0 0;
+    }
 
     .carousel-outer {
       position: relative;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
-    /* 8% peek either side */
     .carousel-track-wrap {
       overflow: visible;
       padding: 0 8%;
@@ -54,7 +74,13 @@
       transform: scale(1);
     }
 
-    /* All slides: 3:2 aspect ratio, full width */
+    /*
+      Image box: 3:2 for photos (landscape), 3:2 container for videos too
+      but videos are centred portrait strips inside.
+      Width is constrained so the 3:2 box never exceeds available height.
+      We calculate max-width from available height using JS, but set a
+      safe CSS fallback using vh.
+    */
     .slide-img {
       width: 100%;
       aspect-ratio: 3 / 2;
@@ -63,9 +89,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      background: none;
     }
 
-    /* Photos: fill the 3:2 box */
     .slide-img.landscape img {
       width: 100%;
       height: 100%;
@@ -73,12 +99,12 @@
       display: block;
     }
 
-    /* Videos: centred portrait strip within the 3:2 box, white space either side */
+    /* Portrait video: centred in the 3:2 box, natural width from full height */
     .slide-img.portrait img {
       height: 100%;
       width: auto;
-      object-fit: cover;
       display: block;
+      object-fit: cover;
     }
 
     .video-badge {
@@ -97,7 +123,8 @@
     .video-badge svg { width: 16px; height: 16px; fill: #fff; margin-left: 3px; }
 
     .carousel-label {
-      margin-top: 8px;
+      flex-shrink: 0;
+      margin-top: 6px;
       text-align: center;
       padding: 0 4px;
       width: 100%;
@@ -108,13 +135,13 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
     .carousel-btn {
       position: absolute;
       top: 50%;
-      transform: translateY(-100%);
+      transform: translateY(-50%);
       background: none;
       border: none;
       width: 40px; height: 40px;
@@ -131,11 +158,19 @@
     .carousel-btn.prev { left: 1.5%; }
     .carousel-btn.next { right: 1.5%; }
 
+    .carousel-bottom {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 0 0;
+    }
+
     .carousel-dots {
       display: flex;
       justify-content: center;
       gap: 7px;
-      margin-top: 8px;
     }
     .dot {
       width: 5px; height: 5px;
@@ -147,7 +182,6 @@
     }
     .dot.active { background: var(--gold); }
 
-    .view-all-wrap { text-align: center; margin-top: 8px; }
     .view-all {
       font-size: 10px;
       letter-spacing: 0.16em;
@@ -160,13 +194,17 @@
     }
     .view-all:hover { color: var(--gold); border-color: var(--gold); }
 
-    /* Footer stays pinned at bottom */
-    footer { margin-top: 8px; }
+    footer {
+      flex-shrink: 0;
+      margin-top: 0;
+      padding: 8px 36px;
+    }
 
     @media (max-width: 768px) {
       .carousel-track-wrap { padding: 0 6%; }
     }
     @media (max-width: 480px) {
+      .carousel-track-wrap { padding: 0 5%; }
     }
   </style>
 </head>
@@ -190,11 +228,13 @@
     <a href="contact.html" onclick="toggleMenu()">Contact</a>
   </div>
 
-  <div class="page-content">
+  <div class="page-wrapper">
+    <div class="nav-spacer"></div>
+
     <div class="hero"><h1>Sam Sutton</h1></div>
 
     <div class="carousel-section">
-      <div class="carousel-outer">
+      <div class="carousel-outer" id="carouselOuter">
         <button class="carousel-btn prev" onclick="manualMove(-1)">&#8592;</button>
         <button class="carousel-btn next" onclick="manualMove(1)">&#8594;</button>
 
@@ -266,16 +306,16 @@
         </div>
       </div>
 
-      <div class="carousel-dots" id="carouselDots"></div>
-      <div class="view-all-wrap">
+      <div class="carousel-bottom">
+        <div class="carousel-dots" id="carouselDots"></div>
         <a href="portfolio.html" class="view-all">View all projects</a>
       </div>
     </div>
-  </div>
 
-  <footer>
-    <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
-  </footer>
+    <footer>
+      <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
+    </footer>
+  </div>
 
   <script>
     function toggleMenu() {
@@ -283,6 +323,46 @@
       document.querySelector('.hamburger').classList.toggle('open');
     }
 
+    // ── Size the carousel to fit exactly within available space ──
+    function sizeCarousel() {
+      const outer = document.getElementById('carouselOuter');
+      const section = outer.closest('.carousel-section');
+      const bottom = section.querySelector('.carousel-bottom');
+
+      // Available height for the image = section height minus bottom UI
+      const sectionH = section.clientHeight;
+      const bottomH  = bottom.offsetHeight;
+      const labelH   = 32; // approx label + margin
+      const gap      = 12; // padding-top of section
+      const availH   = sectionH - bottomH - labelH - gap;
+
+      // At 3:2, width = height * 1.5. Track-wrap is 84% of outer (100% - 8% - 8%)
+      const outerW   = outer.clientWidth;
+      const slotW    = outerW * 0.84;       // 84% after 8% padding each side
+      const maxW     = availH * (3 / 2);    // width if constrained by height
+
+      // Use whichever is smaller — slotW or maxW
+      const imgW = Math.min(slotW, maxW);
+      const imgH = imgW / (3 / 2);
+
+      // Apply to all slide-img boxes
+      document.querySelectorAll('.slide-img').forEach(el => {
+        el.style.width  = imgW + 'px';
+        el.style.height = imgH + 'px';
+        // Remove aspect-ratio so our explicit w/h takes over
+        el.style.aspectRatio = 'unset';
+      });
+
+      // Outer height = image + label
+      outer.style.height = (imgH + labelH) + 'px';
+    }
+
+    window.addEventListener('resize', () => { sizeCarousel(); setPosition(current, false); });
+    window.addEventListener('load', sizeCarousel);
+    // Also run immediately
+    sizeCarousel();
+
+    // ── Carousel logic ──
     const track = document.getElementById('carouselTrack');
     const dotsWrap = document.getElementById('carouselDots');
     const originalSlides = Array.from(track.children);
@@ -354,11 +434,14 @@
       });
     });
 
-    window.addEventListener('resize', () => setPosition(current, false));
-    setPosition(current, false);
-    updateActive();
-    buildDots();
-    startAutoplay();
+    // Run sizing after fonts/images settle, then init carousel
+    setTimeout(() => {
+      sizeCarousel();
+      setPosition(current, false);
+      updateActive();
+      buildDots();
+      startAutoplay();
+    }, 50);
   </script>
 
 </body>
