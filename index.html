@@ -33,7 +33,7 @@
 
     /* ── Below fold: gold background ── */
     .below-fold {
-      background: var(--gold);
+      background: hsla(40, 98%, 50%, 0.75);
       padding: 48px 0 60px;
     }
 
@@ -215,7 +215,7 @@
     .view-all:hover { color: var(--gold); border-color: var(--gold); }
 
     footer {
-      background: var(--gold);
+      background: hsla(40, 98%, 50%, 0.75);
       border-top: 1px solid rgba(0,0,0,0.1);
       margin-top: 0;
       padding: 16px 36px;
@@ -479,7 +479,7 @@
       document.querySelector('.hamburger').classList.toggle('open');
     }
 
-    // ── Size photo carousel to fit exactly in above-fold ──
+    // ── Size photo carousel ──
     function sizePhotoCarousel() {
       const outer   = document.getElementById('photoCarouselOuter');
       const section = outer.closest('.carousel-section');
@@ -498,7 +498,7 @@
       outer.style.height = (imgH + 32) + 'px';
     }
 
-    // ── Size video carousel — portrait 9:16, height = 60vh ──
+    // ── Size video carousel ──
     function sizeVideoCarousel() {
       const h = Math.min(window.innerHeight * 0.6, 520);
       document.querySelectorAll('.slide-video').forEach(el => {
@@ -509,145 +509,126 @@
     }
 
     window.addEventListener('resize', () => {
-      sizePhotoCarousel(); setCarouselPosition('photo', photoState.current, false);
-      sizeVideoCarousel(); setCarouselPosition('video', videoState.current, false);
+      sizePhotoCarousel();
+      if (photoState.allSlides) setPos(photoState, photoState.current, false);
+      sizeVideoCarousel();
+      if (videoState.allSlides) setPos(videoState, videoState.current, false);
     });
 
-    // ── Generic carousel factory ──
-    function initCarousel(trackId, dotsId, dotClass, state) {
-      const track = document.getElementById(trackId);
-      const dotsWrap = document.getElementById(dotsId);
+    // ── Build a carousel from a track element ──
+    function buildCarousel(trackId, dotsId, dotClass) {
+      const track      = document.getElementById(trackId);
+      const dotsWrap   = document.getElementById(dotsId);
       const origSlides = Array.from(track.children);
-      const total = origSlides.length;
+      const total      = origSlides.length;
 
-      const cloneFirst = origSlides[0].cloneNode(true);
-      const cloneLast  = origSlides[total - 1].cloneNode(true);
-      track.appendChild(cloneFirst);
-      track.insertBefore(cloneLast, track.firstChild);
+      // Clone first and last for infinite loop
+      track.appendChild(origSlides[0].cloneNode(true));
+      track.insertBefore(origSlides[total - 1].cloneNode(true), track.firstChild);
 
-      state.track      = track;
-      state.dotsWrap   = dotsWrap;
-      state.dotClass   = dotClass;
-      state.origSlides = origSlides;
-      state.allSlides  = Array.from(track.children);
-      state.total      = total;
-      state.current    = 1;
-      state.isTransitioning = false;
-    }
+      const allSlides = Array.from(track.children);
+      const state = {
+        track, dotsWrap, dotClass,
+        origSlides, allSlides, total,
+        current: 1,
+        transitioning: false,
+        timer: null
+      };
 
-    function slideW(state) { return state.allSlides[1].offsetWidth + 16; }
-
-    function setCarouselPosition(which, index, animate) {
-      const state = which === 'photo' ? photoState : videoState;
-      state.track.style.transition = animate
-        ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-        : 'none';
-      state.track.style.transform = `translateX(-${index * slideW(state)}px)`;
-    }
-
-    function updateCarouselActive(state) {
-      state.allSlides.forEach((s, i) => s.classList.toggle('active', i === state.current));
-    }
-
-    function buildCarouselDots(state) {
-      state.dotsWrap.innerHTML = '';
-      const realIndex = state.current - 1;
-      for (let i = 0; i < state.total; i++) {
-        const btn = document.createElement('button');
-        btn.className = state.dotClass + (i === realIndex ? ' active' : '');
-        btn.onclick = () => { resetAutoplay(state); goTo(state, i + 1); };
-        state.dotsWrap.appendChild(btn);
-      }
-    }
-
-    function goTo(state, index, animate = true) {
-      if (state.isTransitioning) return;
-      state.isTransitioning = true;
-      state.current = index;
-      setCarouselPosition(state === photoState ? 'photo' : 'video', index, animate);
-      updateCarouselActive(state);
-      buildCarouselDots(state);
-    }
-
-    function onTransitionEnd(state) {
-      state.track.addEventListener('transitionend', function handler() {
-        state.track.removeEventListener('transitionend', handler);
-        state.isTransitioning = false;
+      // Single transitionend listener — never re-added
+      track.addEventListener('transitionend', () => {
+        state.transitioning = false;
         if (state.current === 0) {
-          state.current = state.total;
-          setCarouselPosition(state === photoState ? 'photo' : 'video', state.total, false);
-        } else if (state.current === state.total + 1) {
+          state.current = total;
+          setPos(state, total, false);
+        } else if (state.current === total + 1) {
           state.current = 1;
-          setCarouselPosition(state === photoState ? 'photo' : 'video', 1, false);
+          setPos(state, 1, false);
         }
-        updateCarouselActive(state);
-        buildCarouselDots(state);
+        updateActive(state);
+        buildDots(state);
       });
-    }
 
-    function startAutoplay(state) {
-      state.timer = setInterval(() => goTo(state, state.current + 1), 5000);
-    }
-    function resetAutoplay(state) { clearInterval(state.timer); startAutoplay(state); }
-
-    function manualMove(which, dir) {
-      const state = which === 'photo' ? photoState : videoState;
-      resetAutoplay(state);
-      goTo(state, state.current + dir);
-    }
-
-    // ── Click handlers ──
-    function setupClickHandlers(state) {
-      state.allSlides.forEach((slide, i) => {
+      // Click handlers
+      allSlides.forEach((slide, i) => {
         slide.addEventListener('click', () => {
-          if (i !== state.current) { resetAutoplay(state); goTo(state, i); }
-          else {
-            const ri = ((state.current - 1) + state.total) % state.total;
-            const link = state.origSlides[ri].dataset.link;
+          if (i !== state.current) {
+            resetTimer(state);
+            advance(state, i);
+          } else {
+            const ri   = ((state.current - 1) + total) % total;
+            const link = origSlides[ri].dataset.link;
             if (link) location.href = link;
           }
         });
       });
 
-      state.track.addEventListener('transitionend', function handler() {
-        state.track.removeEventListener('transitionend', handler);
-        state.isTransitioning = false;
-        if (state.current === 0) {
-          state.current = state.total;
-          setCarouselPosition(state === photoState ? 'photo' : 'video', state.total, false);
-        } else if (state.current === state.total + 1) {
-          state.current = 1;
-          setCarouselPosition(state === photoState ? 'photo' : 'video', 1, false);
-        }
-        updateCarouselActive(state);
-        buildCarouselDots(state);
-      });
+      return state;
     }
 
-    // ── Init ──
-    const photoState = {};
-    const videoState = {};
+    function setPos(state, index, animate) {
+      const w = state.allSlides[1].offsetWidth + 16;
+      state.track.style.transition = animate
+        ? 'transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94)'
+        : 'none';
+      state.track.style.transform = `translateX(-${index * w}px)`;
+    }
+
+    function updateActive(state) {
+      state.allSlides.forEach((s, i) =>
+        s.classList.toggle('active', i === state.current));
+    }
+
+    function buildDots(state) {
+      state.dotsWrap.innerHTML = '';
+      const ri = state.current - 1;
+      for (let i = 0; i < state.total; i++) {
+        const btn = document.createElement('button');
+        btn.className = state.dotClass + (i === ri ? ' active' : '');
+        btn.onclick = () => { resetTimer(state); advance(state, i + 1); };
+        state.dotsWrap.appendChild(btn);
+      }
+    }
+
+    function advance(state, index, animate = true) {
+      if (state.transitioning) return;
+      state.transitioning = true;
+      state.current = index;
+      setPos(state, index, animate);
+      updateActive(state);
+      buildDots(state);
+    }
+
+    function startTimer(state) {
+      state.timer = setInterval(() => advance(state, state.current + 1), 5000);
+    }
+    function resetTimer(state) { clearInterval(state.timer); startTimer(state); }
+
+    function manualMove(which, dir) {
+      const state = which === 'photo' ? photoState : videoState;
+      resetTimer(state);
+      advance(state, state.current + dir);
+    }
+
+    // ── Initialise both carousels ──
+    let photoState, videoState;
 
     setTimeout(() => {
-      initCarousel('photoTrack', 'photoDots', 'dot', photoState);
-      initCarousel('videoTrack', 'videoDots', 'video-dot', videoState);
+      photoState = buildCarousel('photoTrack', 'photoDots', 'dot');
+      videoState = buildCarousel('videoTrack', 'videoDots', 'video-dot');
 
       sizePhotoCarousel();
       sizeVideoCarousel();
 
-      setCarouselPosition('photo', 1, false);
-      setCarouselPosition('video', 1, false);
+      setPos(photoState, 1, false);
+      setPos(videoState, 1, false);
+      updateActive(photoState);
+      updateActive(videoState);
+      buildDots(photoState);
+      buildDots(videoState);
 
-      updateCarouselActive(photoState);
-      updateCarouselActive(videoState);
-      buildCarouselDots(photoState);
-      buildCarouselDots(videoState);
-
-      setupClickHandlers(photoState);
-      setupClickHandlers(videoState);
-
-      startAutoplay(photoState);
-      startAutoplay(videoState);
+      startTimer(photoState);
+      startTimer(videoState);
     }, 80);
   </script>
 
