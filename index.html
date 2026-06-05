@@ -6,12 +6,16 @@
   <title>Sam Sutton</title>
   <link rel="stylesheet" href="shared.css">
   <style>
-    html, body { height: 100%; overflow: hidden; }
 
-    .page-wrapper {
+    /* ── Above fold: white, no scroll ── */
+    html, body { margin: 0; padding: 0; }
+
+    .above-fold {
       height: 100vh;
       display: flex;
       flex-direction: column;
+      background: #fff;
+      overflow: hidden;
     }
 
     .nav-spacer { height: var(--nav-h); flex-shrink: 0; }
@@ -27,6 +31,23 @@
       text-transform: uppercase;
     }
 
+    /* ── Below fold: gold background ── */
+    .below-fold {
+      background: var(--gold);
+      padding: 48px 0 60px;
+    }
+
+    .below-fold .section-title {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.5);
+      margin-bottom: 24px;
+    }
+
+    /* ── Shared carousel styles ── */
     .carousel-section {
       flex: 1;
       display: flex;
@@ -39,6 +60,12 @@
       position: relative;
       overflow: hidden;
       flex-shrink: 0;
+    }
+
+    /* Video carousel outer — not flex child, normal block */
+    .video-carousel-outer {
+      position: relative;
+      overflow: hidden;
     }
 
     .carousel-track-wrap {
@@ -65,7 +92,7 @@
     }
     .carousel-slide.active { opacity: 1; transform: scale(1); }
 
-    /* Image/video container — sized by JS to fit above fold */
+    /* ── Photo slide image box (3:2, sized by JS) ── */
     .slide-img {
       width: 100%;
       position: relative;
@@ -76,50 +103,48 @@
       background: none;
     }
 
-    /* Landscape photos */
     .slide-img.landscape img {
       width: 100%; height: 100%;
       object-fit: cover; display: block;
     }
 
-    /* Portrait videos — centred strip */
-    .slide-img.portrait img {
-      height: 100%; width: auto;
-      display: block; object-fit: cover;
+    /* ── Video slide box (9:16, fixed height) ── */
+    .slide-video {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      /* height set by JS for video carousel */
     }
 
-    /* Native MP4 autoplay videos */
-    .slide-img.portrait video {
+    .slide-video video {
       height: 100%;
       width: auto;
       display: block;
       object-fit: cover;
     }
 
-    /* YouTube iframe in portrait format, centred */
-    .slide-img.portrait .yt-frame-wrap {
+    /* YouTube iframe portrait crop */
+    .slide-video .yt-frame-wrap {
       height: 100%;
-      /* width = height * 9/16 */
       aspect-ratio: 9 / 16;
       position: relative;
       overflow: hidden;
-      pointer-events: none; /* prevent interaction — clicking slide navigates */
+      pointer-events: none;
     }
-
-    .slide-img.portrait .yt-frame-wrap iframe {
-      /* iframe is 300% wide, offset -100% left, so centre third shows */
+    .slide-video .yt-frame-wrap iframe {
       position: absolute;
-      top: 0;
-      left: -100%;
-      width: 300%;
-      height: 100%;
+      top: 0; left: -100%;
+      width: 300%; height: 100%;
       border: none;
       pointer-events: none;
     }
 
     .carousel-label {
       flex-shrink: 0;
-      margin-top: 6px;
+      margin-top: 8px;
       text-align: center;
       padding: 0 4px;
       width: 100%;
@@ -131,6 +156,11 @@
       color: var(--text); line-height: 1.4;
     }
 
+    /* Video carousel labels are white on gold */
+    .video-carousel-label h3 {
+      color: rgba(0,0,0,0.7);
+    }
+
     .carousel-btn {
       position: absolute;
       top: 50%; transform: translateY(-50%);
@@ -138,9 +168,12 @@
       width: 40px; height: 40px;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; font-size: 18px;
-      color: var(--text-dim); transition: color 0.2s; z-index: 10;
+      transition: color 0.2s; z-index: 10;
     }
-    .carousel-btn:hover { color: var(--gold); }
+    .carousel-btn.photo-btn { color: var(--text-dim); }
+    .carousel-btn.photo-btn:hover { color: var(--gold); }
+    .carousel-btn.video-btn { color: rgba(0,0,0,0.4); }
+    .carousel-btn.video-btn:hover { color: #fff; }
     .carousel-btn.prev { left: 1.5%; }
     .carousel-btn.next { right: 1.5%; }
 
@@ -151,6 +184,12 @@
       padding: 6px 0 0;
     }
 
+    .video-carousel-bottom {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+      padding: 10px 0 0;
+    }
+
     .carousel-dots { display: flex; justify-content: center; gap: 7px; }
     .dot {
       width: 5px; height: 5px; border-radius: 50%;
@@ -158,6 +197,14 @@
       transition: background 0.2s; border: none; padding: 0;
     }
     .dot.active { background: var(--gold); }
+
+    /* Video carousel dots are dark on gold */
+    .video-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(0,0,0,0.25); cursor: pointer;
+      transition: background 0.2s; border: none; padding: 0;
+    }
+    .video-dot.active { background: rgba(0,0,0,0.7); }
 
     .view-all {
       font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
@@ -167,7 +214,13 @@
     }
     .view-all:hover { color: var(--gold); border-color: var(--gold); }
 
-    footer { flex-shrink: 0; margin-top: 0; padding: 8px 36px; }
+    footer {
+      background: var(--gold);
+      border-top: 1px solid rgba(0,0,0,0.1);
+      margin-top: 0;
+      padding: 16px 36px;
+    }
+    footer p { color: rgba(0,0,0,0.5); }
 
     @media (max-width: 768px) { .carousel-track-wrap { padding: 0 6%; } }
     @media (max-width: 480px) { .carousel-track-wrap { padding: 0 5%; } }
@@ -193,66 +246,22 @@
     <a href="contact.html" onclick="toggleMenu()">Contact</a>
   </div>
 
-  <div class="page-wrapper">
+  <!-- ═══════════════════════════════════════
+       ABOVE FOLD — white, photo carousel
+  ════════════════════════════════════════ -->
+  <div class="above-fold">
     <div class="nav-spacer"></div>
     <div class="hero"><h1>Sam Sutton</h1></div>
 
     <div class="carousel-section">
-      <div class="carousel-outer" id="carouselOuter">
-        <button class="carousel-btn prev" onclick="manualMove(-1)">&#8592;</button>
-        <button class="carousel-btn next" onclick="manualMove(1)">&#8594;</button>
+      <div class="carousel-outer" id="photoCarouselOuter">
+        <button class="carousel-btn photo-btn prev" onclick="manualMove('photo', -1)">&#8592;</button>
+        <button class="carousel-btn photo-btn next" onclick="manualMove('photo', 1)">&#8594;</button>
 
         <div class="carousel-track-wrap">
-          <div class="carousel-track" id="carouselTrack">
+          <div class="carousel-track" id="photoTrack">
 
-            <!--
-              VIDEO SLIDES use a muted paused YouTube embed at the exact timestamp.
-              Parameters: start=N (seconds), autoplay=0, mute=1, controls=0, loop=0
-              The iframe is 300% wide with -100% left offset so only the centre
-              9:16 portion of the 16:9 frame shows, giving a portrait crop.
-
-              PHOTO SLIDES use a normal <img> tag.
-            -->
-
-            <!-- 1: Better Belaying Friction Only (start 26s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-16">
-              <div class="slide-img portrait">
-                <div class="yt-frame-wrap">
-                  <iframe src="https://www.youtube.com/embed/8SxPepDYSXw?start=26&autoplay=0&mute=1&controls=0&loop=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
-                </div>
-              </div>
-              <div class="carousel-label"><h3>Better Belaying: Friction Only Devices at TCA</h3></div>
-            </div>
-
-            <!-- 2: Kalymnos (photo) -->
-            <div class="carousel-slide" data-link="portfolio.html#project-3">
-              <div class="slide-img landscape">
-                <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
-              </div>
-              <div class="carousel-label"><h3>Kalymnos</h3></div>
-            </div>
-
-            <!-- 3: Welcome to TCA The Arc (start 0s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-13">
-              <div class="slide-img portrait">
-                <div class="yt-frame-wrap">
-                  <iframe src="https://www.youtube.com/embed/YRNNgsdqXi8?start=0&autoplay=0&mute=1&controls=0&loop=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
-                </div>
-              </div>
-              <div class="carousel-label"><h3>Welcome to TCA The Arc</h3></div>
-            </div>
-
-            <!-- 4: Roped Taster (start 11s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-4">
-              <div class="slide-img portrait">
-                <video autoplay muted loop playsinline>
-                  <source src="Roped Taster.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="carousel-label"><h3>Short Form Video: Roped Taster at The Climbing Academy</h3></div>
-            </div>
-
-            <!-- 5: British Columbia (photo) -->
+            <!-- Photo: British Columbia -->
             <div class="carousel-slide" data-link="portfolio.html#project-2">
               <div class="slide-img landscape">
                 <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
@@ -260,47 +269,7 @@
               <div class="carousel-label"><h3>British Columbia</h3></div>
             </div>
 
-            <!-- 6: She Rocks (start 12s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-12">
-              <div class="slide-img portrait">
-                <video autoplay muted loop playsinline>
-                  <source src="She Rocks.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="carousel-label"><h3>She Rocks at TCA The Mothership</h3></div>
-            </div>
-
-            <!-- 7: Better Auto Belay (start 13s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-17">
-              <div class="slide-img portrait">
-                <div class="yt-frame-wrap">
-                  <iframe src="https://www.youtube.com/embed/lHH5TP7vFcI?start=13&autoplay=0&mute=1&controls=0&loop=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
-                </div>
-              </div>
-              <div class="carousel-label"><h3>Better Auto Belay Use at TCA</h3></div>
-            </div>
-
-            <!-- 8: Tour of TCA (start 18s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-5">
-              <div class="slide-img portrait">
-                <video autoplay muted loop playsinline>
-                  <source src="MS Walk Around.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="carousel-label"><h3>Short Form Video: A Tour of The Climbing Academy</h3></div>
-            </div>
-
-            <!-- 9: Welcome to The Mothership (start 16s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-14">
-              <div class="slide-img portrait">
-                <div class="yt-frame-wrap">
-                  <iframe src="https://www.youtube.com/embed/KAsj2G9NGvk?start=16&autoplay=0&mute=1&controls=0&loop=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
-                </div>
-              </div>
-              <div class="carousel-label"><h3>Welcome to The Mothership</h3></div>
-            </div>
-
-            <!-- 10: Portraiture (photo) -->
+            <!-- Photo: Portraiture -->
             <div class="carousel-slide" data-link="portfolio.html#project-1">
               <div class="slide-img landscape">
                 <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
@@ -308,84 +277,12 @@
               <div class="carousel-label"><h3>Portraiture</h3></div>
             </div>
 
-            <!-- 11: Boulder Socials (start 4s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-9">
-              <div class="slide-img portrait">
-                <video autoplay muted loop playsinline>
-                  <source src="Boulder Socials.mp4" type="video/mp4">
-                </video>
+            <!-- Photo: Kalymnos -->
+            <div class="carousel-slide" data-link="portfolio.html#project-3">
+              <div class="slide-img landscape">
+                <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
               </div>
-              <div class="carousel-label"><h3>Short Form Video: Boulder Socials at The Climbing Academy</h3></div>
-            </div>
-
-            <!-- 12: Better Belaying Geometric (start 17s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-18">
-              <div class="slide-img portrait">
-                <div class="yt-frame-wrap">
-                  <iframe src="https://www.youtube.com/embed/oK1bNwWjNeM?start=17&autoplay=0&mute=1&controls=0&loop=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
-                </div>
-              </div>
-              <div class="carousel-label"><h3>Better Belaying: Geometric Devices at TCA</h3></div>
-            </div>
-
-            <!-- 13: Steve and Tracy (start 11s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-6">
-              <div class="slide-img portrait">
-                <div class="yt-frame-wrap">
-                  <iframe src="https://www.youtube.com/embed/cDTk2uuz_wo?start=11&autoplay=0&mute=1&controls=0&loop=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
-                </div>
-              </div>
-              <div class="carousel-label"><h3>Interview: Steve and Tracy at TCA The Arc</h3></div>
-            </div>
-
-            <!-- 14: An Evening Climbing at TCA The Church (start 9s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-10">
-              <div class="slide-img portrait">
-                <div class="yt-frame-wrap">
-                  <iframe src="https://www.youtube.com/embed/qKsZtPNXlsk?start=9&autoplay=0&mute=1&controls=0&loop=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
-                </div>
-              </div>
-              <div class="carousel-label"><h3>Short Form Video: An Evening Climbing at TCA The Church</h3></div>
-            </div>
-
-            <!-- 15: Future Team GB (start 43s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-7">
-              <div class="slide-img portrait">
-                <video autoplay muted loop playsinline>
-                  <source src="Future Team GB.mp4" type="video/mp4">
-                </video>
-              </div>
-              <div class="carousel-label"><h3>Interview: Future Team GB at The Climbing Academy</h3></div>
-            </div>
-
-            <!-- 16: Welcome to The Church (start 42s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-15">
-              <div class="slide-img portrait">
-                <div class="yt-frame-wrap">
-                  <iframe src="https://www.youtube.com/embed/UDPXhulsHxs?start=42&autoplay=0&mute=1&controls=0&loop=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
-                </div>
-              </div>
-              <div class="carousel-label"><h3>Welcome to The Church</h3></div>
-            </div>
-
-            <!-- 17: Come Climbing (start 3s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-8">
-              <div class="slide-img portrait">
-                <div class="yt-frame-wrap">
-                  <iframe src="https://www.youtube.com/embed/GDMG-ZrvYUY?start=3&autoplay=0&mute=1&controls=0&loop=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
-                </div>
-              </div>
-              <div class="carousel-label"><h3>Short Form Video: Come Climbing at The Climbing Academy</h3></div>
-            </div>
-
-            <!-- 18: 3 Boards 1 Centre (start 12s) -->
-            <div class="carousel-slide video-slide" data-link="portfolio.html#project-11">
-              <div class="slide-img portrait">
-                <div class="yt-frame-wrap">
-                  <iframe src="https://www.youtube.com/embed/zRDDOPaZcs8?start=12&autoplay=0&mute=1&controls=0&loop=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
-                </div>
-              </div>
-              <div class="carousel-label"><h3>Short Form Video: 3 Boards, 1 Centre — TCA The Mothership</h3></div>
+              <div class="carousel-label"><h3>Kalymnos</h3></div>
             </div>
 
           </div>
@@ -393,15 +290,188 @@
       </div>
 
       <div class="carousel-bottom">
-        <div class="carousel-dots" id="carouselDots"></div>
+        <div class="carousel-dots" id="photoDots"></div>
         <a href="portfolio.html" class="view-all">View all projects</a>
       </div>
     </div>
-
-    <footer>
-      <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
-    </footer>
   </div>
+
+  <!-- ═══════════════════════════════════════
+       BELOW FOLD — gold, video carousel
+  ════════════════════════════════════════ -->
+  <div class="below-fold">
+    <p class="section-title">Video Work</p>
+
+    <div class="video-carousel-outer" id="videoCarouselOuter">
+      <button class="carousel-btn video-btn prev" onclick="manualMove('video', -1)">&#8592;</button>
+      <button class="carousel-btn video-btn next" onclick="manualMove('video', 1)">&#8594;</button>
+
+      <div class="carousel-track-wrap">
+        <div class="carousel-track" id="videoTrack">
+
+          <!-- Video: Roped Taster (MP4) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-4">
+            <div class="slide-video" id="sv-roped">
+              <video autoplay muted loop playsinline>
+                <source src="Roped Taster.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Short Form Video: Roped Taster at The Climbing Academy</h3></div>
+          </div>
+
+          <!-- Video: Boulder Socials (MP4) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-9">
+            <div class="slide-video" id="sv-boulder">
+              <video autoplay muted loop playsinline>
+                <source src="Boulder Socials.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Short Form Video: Boulder Socials at The Climbing Academy</h3></div>
+          </div>
+
+          <!-- Video: MS Walk Around (MP4) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-5">
+            <div class="slide-video" id="sv-walkround">
+              <video autoplay muted loop playsinline>
+                <source src="MS Walk Around.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Short Form Video: A Tour of The Climbing Academy</h3></div>
+          </div>
+
+          <!-- Video: She Rocks (MP4) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-12">
+            <div class="slide-video" id="sv-sherocks">
+              <video autoplay muted loop playsinline>
+                <source src="She Rocks.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>She Rocks at TCA The Mothership</h3></div>
+          </div>
+
+          <!-- Video: Future Team GB (MP4) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-7">
+            <div class="slide-video" id="sv-teamgb">
+              <video autoplay muted loop playsinline>
+                <source src="Future Team GB.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Interview: Future Team GB at The Climbing Academy</h3></div>
+          </div>
+
+          <!-- Video: Better Belaying Friction Only (YouTube) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-16">
+            <div class="slide-video">
+              <div class="yt-frame-wrap">
+                <iframe src="https://www.youtube.com/embed/8SxPepDYSXw?start=26&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Better Belaying: Friction Only Devices at TCA</h3></div>
+          </div>
+
+          <!-- Video: Welcome to TCA The Arc (YouTube) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-13">
+            <div class="slide-video">
+              <div class="yt-frame-wrap">
+                <iframe src="https://www.youtube.com/embed/YRNNgsdqXi8?start=0&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Welcome to TCA The Arc</h3></div>
+          </div>
+
+          <!-- Video: Better Auto Belay (YouTube) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-17">
+            <div class="slide-video">
+              <div class="yt-frame-wrap">
+                <iframe src="https://www.youtube.com/embed/lHH5TP7vFcI?start=13&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Better Auto Belay Use at TCA</h3></div>
+          </div>
+
+          <!-- Video: Welcome to The Mothership (YouTube) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-14">
+            <div class="slide-video">
+              <div class="yt-frame-wrap">
+                <iframe src="https://www.youtube.com/embed/KAsj2G9NGvk?start=16&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Welcome to The Mothership</h3></div>
+          </div>
+
+          <!-- Video: Better Belaying Geometric (YouTube) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-18">
+            <div class="slide-video">
+              <div class="yt-frame-wrap">
+                <iframe src="https://www.youtube.com/embed/oK1bNwWjNeM?start=17&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Better Belaying: Geometric Devices at TCA</h3></div>
+          </div>
+
+          <!-- Video: Steve and Tracy (YouTube) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-6">
+            <div class="slide-video">
+              <div class="yt-frame-wrap">
+                <iframe src="https://www.youtube.com/embed/cDTk2uuz_wo?start=11&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Interview: Steve and Tracy at TCA The Arc</h3></div>
+          </div>
+
+          <!-- Video: An Evening Climbing at TCA The Church (YouTube) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-10">
+            <div class="slide-video">
+              <div class="yt-frame-wrap">
+                <iframe src="https://www.youtube.com/embed/qKsZtPNXlsk?start=9&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Short Form Video: An Evening Climbing at TCA The Church</h3></div>
+          </div>
+
+          <!-- Video: Future Team GB YouTube (backup) -->
+          <!-- Video: Welcome to The Church (YouTube) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-15">
+            <div class="slide-video">
+              <div class="yt-frame-wrap">
+                <iframe src="https://www.youtube.com/embed/UDPXhulsHxs?start=42&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Welcome to The Church</h3></div>
+          </div>
+
+          <!-- Video: Come Climbing (YouTube) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-8">
+            <div class="slide-video">
+              <div class="yt-frame-wrap">
+                <iframe src="https://www.youtube.com/embed/GDMG-ZrvYUY?start=3&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Short Form Video: Come Climbing at The Climbing Academy</h3></div>
+          </div>
+
+          <!-- Video: 3 Boards 1 Centre (YouTube) -->
+          <div class="carousel-slide" data-link="portfolio.html#project-11">
+            <div class="slide-video">
+              <div class="yt-frame-wrap">
+                <iframe src="https://www.youtube.com/embed/zRDDOPaZcs8?start=12&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="carousel-label video-carousel-label"><h3>Short Form Video: 3 Boards, 1 Centre — TCA The Mothership</h3></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="video-carousel-bottom">
+      <div class="carousel-dots" id="videoDots"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
+  </footer>
 
   <script>
     function toggleMenu() {
@@ -409,8 +479,9 @@
       document.querySelector('.hamburger').classList.toggle('open');
     }
 
-    function sizeCarousel() {
-      const outer   = document.getElementById('carouselOuter');
+    // ── Size photo carousel to fit exactly in above-fold ──
+    function sizePhotoCarousel() {
+      const outer   = document.getElementById('photoCarouselOuter');
       const section = outer.closest('.carousel-section');
       const bottom  = section.querySelector('.carousel-bottom');
       const availH  = section.clientHeight - bottom.offsetHeight - 32 - 12;
@@ -419,7 +490,6 @@
       const maxW    = availH * (3 / 2);
       const imgW    = Math.min(slotW, maxW);
       const imgH    = imgW / (3 / 2);
-
       document.querySelectorAll('.slide-img').forEach(el => {
         el.style.width       = imgW + 'px';
         el.style.height      = imgH + 'px';
@@ -428,86 +498,157 @@
       outer.style.height = (imgH + 32) + 'px';
     }
 
-    window.addEventListener('resize', () => { sizeCarousel(); setPosition(current, false); });
+    // ── Size video carousel — portrait 9:16, height = 60vh ──
+    function sizeVideoCarousel() {
+      const h = Math.min(window.innerHeight * 0.6, 520);
+      document.querySelectorAll('.slide-video').forEach(el => {
+        el.style.height = h + 'px';
+        el.style.width  = (h * 9 / 16) + 'px';
+      });
+      document.getElementById('videoCarouselOuter').style.height = (h + 40) + 'px';
+    }
 
-    const track    = document.getElementById('carouselTrack');
-    const dotsWrap = document.getElementById('carouselDots');
-    const originalSlides = Array.from(track.children);
-    const total = originalSlides.length;
+    window.addEventListener('resize', () => {
+      sizePhotoCarousel(); setCarouselPosition('photo', photoState.current, false);
+      sizeVideoCarousel(); setCarouselPosition('video', videoState.current, false);
+    });
 
-    const cloneFirst = originalSlides[0].cloneNode(true);
-    const cloneLast  = originalSlides[total - 1].cloneNode(true);
-    track.appendChild(cloneFirst);
-    track.insertBefore(cloneLast, track.firstChild);
+    // ── Generic carousel factory ──
+    function initCarousel(trackId, dotsId, dotClass, state) {
+      const track = document.getElementById(trackId);
+      const dotsWrap = document.getElementById(dotsId);
+      const origSlides = Array.from(track.children);
+      const total = origSlides.length;
 
-    const allSlides = Array.from(track.children);
-    let current = 1;
-    let isTransitioning = false;
-    let autoTimer = null;
+      const cloneFirst = origSlides[0].cloneNode(true);
+      const cloneLast  = origSlides[total - 1].cloneNode(true);
+      track.appendChild(cloneFirst);
+      track.insertBefore(cloneLast, track.firstChild);
 
-    function slideWidth() { return allSlides[1].offsetWidth + 16; }
+      state.track      = track;
+      state.dotsWrap   = dotsWrap;
+      state.dotClass   = dotClass;
+      state.origSlides = origSlides;
+      state.allSlides  = Array.from(track.children);
+      state.total      = total;
+      state.current    = 1;
+      state.isTransitioning = false;
+    }
 
-    function setPosition(index, animate) {
-      track.style.transition = animate
+    function slideW(state) { return state.allSlides[1].offsetWidth + 16; }
+
+    function setCarouselPosition(which, index, animate) {
+      const state = which === 'photo' ? photoState : videoState;
+      state.track.style.transition = animate
         ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
         : 'none';
-      track.style.transform = `translateX(-${index * slideWidth()}px)`;
+      state.track.style.transform = `translateX(-${index * slideW(state)}px)`;
     }
 
-    function updateActive() {
-      allSlides.forEach((s, i) => s.classList.toggle('active', i === current));
+    function updateCarouselActive(state) {
+      state.allSlides.forEach((s, i) => s.classList.toggle('active', i === state.current));
     }
 
-    function buildDots() {
-      dotsWrap.innerHTML = '';
-      const realIndex = current - 1;
-      for (let i = 0; i < total; i++) {
+    function buildCarouselDots(state) {
+      state.dotsWrap.innerHTML = '';
+      const realIndex = state.current - 1;
+      for (let i = 0; i < state.total; i++) {
         const btn = document.createElement('button');
-        btn.className = 'dot' + (i === realIndex ? ' active' : '');
-        btn.onclick = () => { resetAutoplay(); goTo(i + 1); };
-        dotsWrap.appendChild(btn);
+        btn.className = state.dotClass + (i === realIndex ? ' active' : '');
+        btn.onclick = () => { resetAutoplay(state); goTo(state, i + 1); };
+        state.dotsWrap.appendChild(btn);
       }
     }
 
-    function goTo(index, animate = true) {
-      if (isTransitioning) return;
-      isTransitioning = true;
-      current = index;
-      setPosition(current, animate);
-      updateActive();
-      buildDots();
+    function goTo(state, index, animate = true) {
+      if (state.isTransitioning) return;
+      state.isTransitioning = true;
+      state.current = index;
+      setCarouselPosition(state === photoState ? 'photo' : 'video', index, animate);
+      updateCarouselActive(state);
+      buildCarouselDots(state);
     }
 
-    track.addEventListener('transitionend', () => {
-      isTransitioning = false;
-      if (current === 0) { current = total; setPosition(current, false); }
-      else if (current === total + 1) { current = 1; setPosition(current, false); }
-      updateActive();
-      buildDots();
-    });
-
-    function startAutoplay() { autoTimer = setInterval(() => goTo(current + 1), 5000); }
-    function resetAutoplay() { clearInterval(autoTimer); startAutoplay(); }
-    function manualMove(dir) { resetAutoplay(); goTo(current + dir); }
-
-    allSlides.forEach((slide, i) => {
-      slide.addEventListener('click', () => {
-        if (i !== current) { resetAutoplay(); goTo(i); }
-        else {
-          const realIndex = ((current - 1) + total) % total;
-          const link = originalSlides[realIndex].dataset.link;
-          if (link) location.href = link;
+    function onTransitionEnd(state) {
+      state.track.addEventListener('transitionend', function handler() {
+        state.track.removeEventListener('transitionend', handler);
+        state.isTransitioning = false;
+        if (state.current === 0) {
+          state.current = state.total;
+          setCarouselPosition(state === photoState ? 'photo' : 'video', state.total, false);
+        } else if (state.current === state.total + 1) {
+          state.current = 1;
+          setCarouselPosition(state === photoState ? 'photo' : 'video', 1, false);
         }
+        updateCarouselActive(state);
+        buildCarouselDots(state);
       });
-    });
+    }
+
+    function startAutoplay(state) {
+      state.timer = setInterval(() => goTo(state, state.current + 1), 5000);
+    }
+    function resetAutoplay(state) { clearInterval(state.timer); startAutoplay(state); }
+
+    function manualMove(which, dir) {
+      const state = which === 'photo' ? photoState : videoState;
+      resetAutoplay(state);
+      goTo(state, state.current + dir);
+    }
+
+    // ── Click handlers ──
+    function setupClickHandlers(state) {
+      state.allSlides.forEach((slide, i) => {
+        slide.addEventListener('click', () => {
+          if (i !== state.current) { resetAutoplay(state); goTo(state, i); }
+          else {
+            const ri = ((state.current - 1) + state.total) % state.total;
+            const link = state.origSlides[ri].dataset.link;
+            if (link) location.href = link;
+          }
+        });
+      });
+
+      state.track.addEventListener('transitionend', function handler() {
+        state.track.removeEventListener('transitionend', handler);
+        state.isTransitioning = false;
+        if (state.current === 0) {
+          state.current = state.total;
+          setCarouselPosition(state === photoState ? 'photo' : 'video', state.total, false);
+        } else if (state.current === state.total + 1) {
+          state.current = 1;
+          setCarouselPosition(state === photoState ? 'photo' : 'video', 1, false);
+        }
+        updateCarouselActive(state);
+        buildCarouselDots(state);
+      });
+    }
+
+    // ── Init ──
+    const photoState = {};
+    const videoState = {};
 
     setTimeout(() => {
-      sizeCarousel();
-      setPosition(current, false);
-      updateActive();
-      buildDots();
-      startAutoplay();
-    }, 50);
+      initCarousel('photoTrack', 'photoDots', 'dot', photoState);
+      initCarousel('videoTrack', 'videoDots', 'video-dot', videoState);
+
+      sizePhotoCarousel();
+      sizeVideoCarousel();
+
+      setCarouselPosition('photo', 1, false);
+      setCarouselPosition('video', 1, false);
+
+      updateCarouselActive(photoState);
+      updateCarouselActive(videoState);
+      buildCarouselDots(photoState);
+      buildCarouselDots(videoState);
+
+      setupClickHandlers(photoState);
+      setupClickHandlers(videoState);
+
+      startAutoplay(photoState);
+      startAutoplay(videoState);
+    }, 80);
   </script>
 
 </body>
