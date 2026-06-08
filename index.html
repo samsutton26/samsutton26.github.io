@@ -473,6 +473,12 @@
     <p>Sam Sutton &nbsp;·&nbsp; &copy; 2026</p>
   </footer>
 
+  <!-- Section indicator dots -->
+  <div class="section-dots" id="sectionDots">
+    <button class="section-dot white active" id="dot-white" onclick="scrollToSection('above')" aria-label="Photos section"></button>
+    <button class="section-dot gold" id="dot-gold" onclick="scrollToSection('below')" aria-label="Video section"></button>
+  </div>
+
   <script>
     function toggleMenu() {
       document.getElementById('mobileMenu').classList.toggle('open');
@@ -630,6 +636,27 @@
       startTimer(photoState);
       startTimer(videoState);
     }, 80);
+
+    // ── Section dot scroll detection ──
+    function scrollToSection(which) {
+      if (which === 'above') {
+        document.querySelector('.above-fold').scrollIntoView({ behavior: 'smooth' });
+      } else {
+        document.querySelector('.below-fold').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Update active dot based on scroll position
+    function updateSectionDots() {
+      const belowFold  = document.querySelector('.below-fold');
+      const belowTop   = belowFold.getBoundingClientRect().top;
+      const isOnBelow  = belowTop <= window.innerHeight * 0.5;
+      document.getElementById('dot-white').classList.toggle('active', !isOnBelow);
+      document.getElementById('dot-gold').classList.toggle('active', isOnBelow);
+    }
+
+    window.addEventListener('scroll', updateSectionDots, { passive: true });
+    updateSectionDots();
   </script>
 
 </body>
