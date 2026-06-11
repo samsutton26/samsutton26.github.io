@@ -34,7 +34,7 @@
 
     /* ── Below fold: gold background ── */
     .below-fold {
-      background: hsla(40, 98%, 50%, 0.75);
+      background: hsl(40, 98%, 50%);
       padding: 48px 0 60px;
     }
 
@@ -216,7 +216,7 @@
     .view-all:hover { color: var(--gold); border-color: var(--gold); }
 
     footer {
-      background: hsla(40, 98%, 50%, 0.75);
+      background: hsl(40, 98%, 50%);
       border-top: 1px solid rgba(0,0,0,0.1);
       margin-top: 0;
       padding: 16px 36px;
@@ -225,6 +225,86 @@
 
     @media (max-width: 768px) { .carousel-track-wrap { padding: 0 6%; } }
     @media (max-width: 480px) { .carousel-track-wrap { padding: 0 5%; } }
+
+    /* ── Option E: side dots + gold section peek with label and arrow ── */
+
+    /* Side dots */
+    .section-dots {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 9999;
+      pointer-events: all;
+    }
+
+    .section-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      display: block;
+      transition: transform 0.3s, opacity 0.3s;
+      opacity: 0.5;
+    }
+
+    .section-dot.active {
+      transform: scale(1.5);
+      opacity: 1;
+    }
+
+    .section-dot.white  { background: #1a1a1a; }
+    .section-dot.gold   { background: hsl(40, 98%, 50%); border: 1px solid rgba(0,0,0,0.15); }
+
+    /* Gold peek strip — fixed at bottom of viewport, above the fold only */
+    .scroll-peek {
+      position: fixed;
+      bottom: 0;
+      left: 0; right: 0;
+      height: 36px;
+      background: hsl(40, 98%, 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      z-index: 9998;
+      cursor: pointer;
+      transition: opacity 0.4s, transform 0.4s;
+    }
+
+    .scroll-peek.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(100%);
+    }
+
+    .scroll-peek svg {
+      width: 12px; height: 12px;
+      stroke: rgba(0,0,0,0.45);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .scroll-peek span {
+      font-family: Arial, sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,0.45);
+    }
+
+    @media (max-width: 480px) {
+      .section-dots { right: 10px; }
+    }
+
   </style>
 </head>
 <body>
@@ -480,6 +560,12 @@
     <button class="section-dot gold" id="dot-gold" onclick="scrollToSection('below')" aria-label="Video section"></button>
   </div>
 
+  <!-- Gold peek strip at bottom -->
+  <div class="scroll-peek" id="scrollPeek" onclick="scrollToSection('below')">
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    <span>Video work</span>
+  </div>
+
   <script>
     function toggleMenu() {
       document.getElementById('mobileMenu').classList.toggle('open');
@@ -654,6 +740,8 @@
         const onBelow = entry.isIntersecting && entry.intersectionRatio > 0.1;
         document.getElementById('dot-white').classList.toggle('active', !onBelow);
         document.getElementById('dot-gold').classList.toggle('active', onBelow);
+        // Hide peek strip once user has scrolled to video section
+        document.getElementById('scrollPeek').classList.toggle('hidden', onBelow);
       });
     }, { threshold: 0.1 });
 
