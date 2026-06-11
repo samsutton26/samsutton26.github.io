@@ -34,7 +34,7 @@
 
     /* ── Below fold: gold background ── */
     .below-fold {
-      background: hsl(40, 98%, 50%);
+      background: hsla(40, 98%, 50%, 0.75);
       padding: 48px 0 60px;
     }
 
@@ -125,6 +125,10 @@
       width: auto;
       display: block;
       object-fit: cover;
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
     }
 
     /* YouTube iframe portrait crop */
@@ -216,7 +220,7 @@
     .view-all:hover { color: var(--gold); border-color: var(--gold); }
 
     footer {
-      background: hsl(40, 98%, 50%);
+      background: hsla(40, 98%, 50%, 0.75);
       border-top: 1px solid rgba(0,0,0,0.1);
       margin-top: 0;
       padding: 16px 36px;
@@ -273,6 +277,7 @@
       justify-content: center;
       gap: 8px;
       z-index: 9998;
+      /* 100% opacity — matches --gold exactly */
       cursor: pointer;
       transition: opacity 0.4s, transform 0.4s;
     }
