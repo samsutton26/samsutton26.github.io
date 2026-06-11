@@ -374,6 +374,12 @@
         <div class="project-info"><h3>Better Belaying: Geometric Devices at TCA</h3></div>
       </div>
 
+      <!-- 19: TCA Community Interviews (folder) -->
+      <div class="project-card" id="project-19" onclick="openProject('tca-interviews')">
+        <img src="https://img.youtube.com/vi/nDlZPSAo3hA/maxresdefault.jpg" alt="TCA Community Interviews">
+        <div class="project-info"><h3>TCA Community Interviews</h3></div>
+      </div>
+
     </div>
   </div>
 
@@ -451,6 +457,38 @@
       <div class="modal-footer">
         <div class="modal-dots" id="dots-kalymnos"></div>
         <div class="modal-counter" id="counter-kalymnos"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TCA COMMUNITY INTERVIEWS MODAL -->
+  <div class="project-modal" id="modal-tca-interviews">
+    <button class="modal-close" onclick="closeTcaInterviews()">✕</button>
+    <span class="modal-title">TCA Community Interviews</span>
+    <div class="modal-carousel">
+      <div class="modal-track-outer">
+        <button class="modal-btn prev" onclick="modalMove('tca-interviews', -1)">&#8592;</button>
+        <button class="modal-btn next" onclick="modalMove('tca-interviews', 1)">&#8594;</button>
+        <div class="modal-track-wrap">
+          <div class="modal-track" id="track-tca-interviews">
+            <!-- Video 1 -->
+            <div class="modal-slide active">
+              <div class="modal-video-wrap">
+                <iframe src="https://www.youtube.com/embed/nDlZPSAo3hA?autoplay=1&rel=0"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <!--
+              TO ADD MORE VIDEOS TO THIS FOLDER:
+              Copy the block above and replace nDlZPSAo3hA with the new YouTube video ID.
+              The carousel will loop through all videos in the folder.
+            -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-dots" id="dots-tca-interviews"></div>
+        <div class="modal-counter" id="counter-tca-interviews"></div>
       </div>
     </div>
   </div>
@@ -567,9 +605,25 @@
     }
 
     function openProject(id) {
+      if (id === 'tca-interviews') {
+        // Video folder — open modal directly without image carousel init
+        document.getElementById('modal-tca-interviews').classList.add('open');
+        document.body.style.overflow = 'hidden';
+        return;
+      }
       initCarousel(id);
       document.getElementById('modal-' + id).classList.add('open');
       document.body.style.overflow = 'hidden';
+    }
+
+    function closeTcaInterviews() {
+      const modal = document.getElementById('modal-tca-interviews');
+      // Stop video playback by clearing iframes
+      modal.querySelectorAll('iframe').forEach(iframe => {
+        iframe.src = iframe.src;
+      });
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
     }
 
     function closeProject(id) {
@@ -597,6 +651,7 @@
         if (e.target !== modal) return;
         const id = modal.id.replace('modal-', '');
         if (id === 'video') closeVideo();
+        else if (id === 'tca-interviews') closeTcaInterviews();
         else closeProject(id);
       });
     });
@@ -606,6 +661,7 @@
         document.querySelectorAll('.project-modal.open').forEach(m => {
           const id = m.id.replace('modal-', '');
           if (id === 'video') closeVideo();
+          else if (id === 'tca-interviews') closeTcaInterviews();
           else closeProject(id);
         });
       }
