@@ -227,8 +227,27 @@
     }
     footer p { color: rgba(0,0,0,0.5); }
 
-    @media (max-width: 768px) { .carousel-track-wrap { padding: 0 6%; } }
-    @media (max-width: 480px) { .carousel-track-wrap { padding: 0 5%; } }
+    @media (max-width: 768px) {
+      .carousel-track-wrap { padding: 0 6%; }
+    }
+    @media (max-width: 480px) {
+      .carousel-track-wrap { padding: 0 5%; }
+    }
+
+    /* ── Mobile: centre carousel vertically in the above-fold section ── */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 0 24px 0;
+        flex: 0;
+      }
+      .carousel-section {
+        justify-content: center;
+        padding: 0;
+      }
+      .carousel-bottom {
+        padding: 8px 0 0;
+      }
+    }
 
     /* ── Option E: side dots + gold section peek with label and arrow ── */
 
