@@ -15,7 +15,8 @@
       display: flex;
       flex-direction: column;
       background: #fff;
-      overflow: hidden;
+      overflow: hidden; /* only clip content within this section */
+      flex-shrink: 0;
     }
 
     .nav-spacer { height: var(--nav-h); flex-shrink: 0; }
@@ -646,17 +647,17 @@
       }
     }
 
-    // Update active dot based on scroll position
-    function updateSectionDots() {
-      const belowFold  = document.querySelector('.below-fold');
-      const belowTop   = belowFold.getBoundingClientRect().top;
-      const isOnBelow  = belowTop <= window.innerHeight * 0.5;
-      document.getElementById('dot-white').classList.toggle('active', !isOnBelow);
-      document.getElementById('dot-gold').classList.toggle('active', isOnBelow);
-    }
+    // Use IntersectionObserver to detect which section is visible
+    const belowSection = document.querySelector('.below-fold');
+    const dotObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const onBelow = entry.isIntersecting && entry.intersectionRatio > 0.1;
+        document.getElementById('dot-white').classList.toggle('active', !onBelow);
+        document.getElementById('dot-gold').classList.toggle('active', onBelow);
+      });
+    }, { threshold: 0.1 });
 
-    window.addEventListener('scroll', updateSectionDots, { passive: true });
-    updateSectionDots();
+    if (belowSection) dotObserver.observe(belowSection);
   </script>
 
 </body>
