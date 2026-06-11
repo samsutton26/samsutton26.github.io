@@ -369,7 +369,7 @@
             <!-- Photo: British Columbia -->
             <div class="carousel-slide" data-link="portfolio.html#project-2">
               <div class="slide-img landscape">
-                <img src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
+                <img loading="lazy" src="Sam Sutton British Columbia 3.jpg" alt="British Columbia">
               </div>
               <div class="carousel-label"><h3>British Columbia</h3></div>
             </div>
@@ -377,7 +377,7 @@
             <!-- Photo: Portraiture -->
             <div class="carousel-slide" data-link="portfolio.html#project-1">
               <div class="slide-img landscape">
-                <img src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
+                <img loading="lazy" src="Sam Sutton Portraiture 1.webp" alt="Portraiture">
               </div>
               <div class="carousel-label"><h3>Portraiture</h3></div>
             </div>
@@ -385,7 +385,7 @@
             <!-- Photo: Kalymnos -->
             <div class="carousel-slide" data-link="portfolio.html#project-3">
               <div class="slide-img landscape">
-                <img src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
+                <img loading="lazy" src="Sam_Sutton_Kaly-26.jpg" alt="Kalymnos">
               </div>
               <div class="carousel-label"><h3>Kalymnos</h3></div>
             </div>
@@ -417,7 +417,7 @@
           <!-- Video: Roped Taster (MP4) -->
           <div class="carousel-slide" data-link="portfolio.html#project-4">
             <div class="slide-video" id="sv-roped">
-              <video autoplay muted loop playsinline>
+              <video autoplay muted loop playsinline preload="metadata">
                 <source src="Roped Taster.mp4" type="video/mp4">
               </video>
             </div>
@@ -427,7 +427,7 @@
           <!-- Video: Boulder Socials (MP4) -->
           <div class="carousel-slide" data-link="portfolio.html#project-9">
             <div class="slide-video" id="sv-boulder">
-              <video autoplay muted loop playsinline>
+              <video autoplay muted loop playsinline preload="metadata">
                 <source src="Boulder Socials.mp4" type="video/mp4">
               </video>
             </div>
@@ -437,7 +437,7 @@
           <!-- Video: MS Walk Around (MP4) -->
           <div class="carousel-slide" data-link="portfolio.html#project-5">
             <div class="slide-video" id="sv-walkround">
-              <video autoplay muted loop playsinline>
+              <video autoplay muted loop playsinline preload="metadata">
                 <source src="MS Walk Around.mp4" type="video/mp4">
               </video>
             </div>
@@ -447,7 +447,7 @@
           <!-- Video: She Rocks (MP4) -->
           <div class="carousel-slide" data-link="portfolio.html#project-12">
             <div class="slide-video" id="sv-sherocks">
-              <video autoplay muted loop playsinline>
+              <video autoplay muted loop playsinline preload="metadata">
                 <source src="She Rocks.mp4" type="video/mp4">
               </video>
             </div>
@@ -457,7 +457,7 @@
           <!-- Video: Future Team GB (MP4) -->
           <div class="carousel-slide" data-link="portfolio.html#project-7">
             <div class="slide-video" id="sv-teamgb">
-              <video autoplay muted loop playsinline>
+              <video autoplay muted loop playsinline preload="metadata">
                 <source src="Future Team GB.mp4" type="video/mp4">
               </video>
             </div>
@@ -466,109 +466,119 @@
 
           <!-- Video: Better Belaying Friction Only (YouTube) -->
           <div class="carousel-slide" data-link="portfolio.html#project-16">
-            <div class="slide-video">
-              <div class="yt-frame-wrap">
-                <iframe src="https://www.youtube.com/embed/8SxPepDYSXw?start=26&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+            <div class="slide-video" style="cursor:pointer;position:relative;">
+                <img src="https://img.youtube.com/vi/8SxPepDYSXw/maxresdefault.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;margin-left:3px;"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
               </div>
-            </div>
             <div class="carousel-label video-carousel-label"><h3>Better Belaying: Friction Only Devices at TCA</h3></div>
           </div>
 
           <!-- Video: Welcome to TCA The Arc (YouTube) -->
           <div class="carousel-slide" data-link="portfolio.html#project-13">
-            <div class="slide-video">
-              <div class="yt-frame-wrap">
-                <iframe src="https://www.youtube.com/embed/YRNNgsdqXi8?start=0&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+            <div class="slide-video" style="cursor:pointer;position:relative;">
+                <img src="https://img.youtube.com/vi/YRNNgsdqXi8/maxresdefault.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;margin-left:3px;"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
               </div>
-            </div>
             <div class="carousel-label video-carousel-label"><h3>Welcome to TCA The Arc</h3></div>
           </div>
 
           <!-- Video: Better Auto Belay (YouTube) -->
           <div class="carousel-slide" data-link="portfolio.html#project-17">
-            <div class="slide-video">
-              <div class="yt-frame-wrap">
-                <iframe src="https://www.youtube.com/embed/lHH5TP7vFcI?start=13&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+            <div class="slide-video" style="cursor:pointer;position:relative;">
+                <img src="https://img.youtube.com/vi/lHH5TP7vFcI/maxresdefault.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;margin-left:3px;"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
               </div>
-            </div>
             <div class="carousel-label video-carousel-label"><h3>Better Auto Belay Use at TCA</h3></div>
           </div>
 
           <!-- Video: Welcome to The Mothership (YouTube) -->
           <div class="carousel-slide" data-link="portfolio.html#project-14">
-            <div class="slide-video">
-              <div class="yt-frame-wrap">
-                <iframe src="https://www.youtube.com/embed/KAsj2G9NGvk?start=16&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+            <div class="slide-video" style="cursor:pointer;position:relative;">
+                <img src="https://img.youtube.com/vi/KAsj2G9NGvk/maxresdefault.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;margin-left:3px;"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
               </div>
-            </div>
             <div class="carousel-label video-carousel-label"><h3>Welcome to The Mothership</h3></div>
           </div>
 
           <!-- Video: Better Belaying Geometric (YouTube) -->
           <div class="carousel-slide" data-link="portfolio.html#project-18">
-            <div class="slide-video">
-              <div class="yt-frame-wrap">
-                <iframe src="https://www.youtube.com/embed/oK1bNwWjNeM?start=17&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+            <div class="slide-video" style="cursor:pointer;position:relative;">
+                <img src="https://img.youtube.com/vi/oK1bNwWjNeM/maxresdefault.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;margin-left:3px;"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
               </div>
-            </div>
             <div class="carousel-label video-carousel-label"><h3>Better Belaying: Geometric Devices at TCA</h3></div>
           </div>
 
           <!-- Video: Steve and Tracy (YouTube) -->
           <div class="carousel-slide" data-link="portfolio.html#project-6">
-            <div class="slide-video">
-              <div class="yt-frame-wrap">
-                <iframe src="https://www.youtube.com/embed/cDTk2uuz_wo?start=11&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+            <div class="slide-video" style="cursor:pointer;position:relative;">
+                <img src="https://img.youtube.com/vi/cDTk2uuz_wo/maxresdefault.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;margin-left:3px;"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
               </div>
-            </div>
             <div class="carousel-label video-carousel-label"><h3>Interview: Steve and Tracy at TCA The Arc</h3></div>
           </div>
 
           <!-- Video: An Evening Climbing at TCA The Church (YouTube) -->
           <div class="carousel-slide" data-link="portfolio.html#project-10">
-            <div class="slide-video">
-              <div class="yt-frame-wrap">
-                <iframe src="https://www.youtube.com/embed/qKsZtPNXlsk?start=9&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+            <div class="slide-video" style="cursor:pointer;position:relative;">
+                <img src="https://img.youtube.com/vi/qKsZtPNXlsk/maxresdefault.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;margin-left:3px;"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
               </div>
-            </div>
             <div class="carousel-label video-carousel-label"><h3>Short Form Video: An Evening Climbing at TCA The Church</h3></div>
           </div>
 
           <!-- Video: Future Team GB YouTube (backup) -->
           <!-- Video: Welcome to The Church (YouTube) -->
           <div class="carousel-slide" data-link="portfolio.html#project-15">
-            <div class="slide-video">
-              <div class="yt-frame-wrap">
-                <iframe src="https://www.youtube.com/embed/UDPXhulsHxs?start=42&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+            <div class="slide-video" style="cursor:pointer;position:relative;">
+                <img src="https://img.youtube.com/vi/UDPXhulsHxs/maxresdefault.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;margin-left:3px;"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
               </div>
-            </div>
             <div class="carousel-label video-carousel-label"><h3>Welcome to The Church</h3></div>
           </div>
 
           <!-- Video: Come Climbing (YouTube) -->
           <div class="carousel-slide" data-link="portfolio.html#project-8">
-            <div class="slide-video">
-              <div class="yt-frame-wrap">
-                <iframe src="https://www.youtube.com/embed/GDMG-ZrvYUY?start=3&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+            <div class="slide-video" style="cursor:pointer;position:relative;">
+                <img src="https://img.youtube.com/vi/GDMG-ZrvYUY/maxresdefault.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;margin-left:3px;"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
               </div>
-            </div>
             <div class="carousel-label video-carousel-label"><h3>Short Form Video: Come Climbing at The Climbing Academy</h3></div>
           </div>
 
           <!-- Video: 3 Boards 1 Centre (YouTube) -->
           <div class="carousel-slide" data-link="portfolio.html#project-11">
-            <div class="slide-video">
-              <div class="yt-frame-wrap">
-                <iframe src="https://www.youtube.com/embed/zRDDOPaZcs8?start=12&autoplay=0&mute=1&controls=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay" allowfullscreen></iframe>
+            <div class="slide-video" style="cursor:pointer;position:relative;">
+                <img src="https://img.youtube.com/vi/zRDDOPaZcs8/maxresdefault.jpg" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                  <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;margin-left:3px;"><polygon points="5,3 19,12 5,21"/></svg>
+                </div>
               </div>
-            </div>
             <div class="carousel-label video-carousel-label"><h3>Short Form Video: 3 Boards, 1 Centre — TCA The Mothership</h3></div>
           </div>
 
           <!-- Video: Community Interviews (MP4) -->
           <div class="carousel-slide" data-link="portfolio.html#project-19">
             <div class="slide-video">
-              <video autoplay muted loop playsinline>
+              <video autoplay muted loop playsinline preload="metadata">
                 <source src="Community Videos.mp4" type="video/mp4">
               </video>
             </div>
