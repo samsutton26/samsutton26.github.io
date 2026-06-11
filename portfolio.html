@@ -470,13 +470,57 @@
         <button class="modal-btn prev" onclick="tcaMove(-1)">&#8592;</button>
         <button class="modal-btn next" onclick="tcaMove(1)">&#8594;</button>
         <div class="modal-track-wrap">
-          <div class="modal-track" id="track-tca-interviews">
-            <div class="modal-slide active">
+                    <div class="modal-track" id="track-tca-interviews">
+            <div class="modal-slide active" data-videoid="nDlZPSAo3hA">
               <div class="modal-video-wrap">
-                <iframe src="https://www.youtube.com/embed/nDlZPSAo3hA?rel=0"
+                <iframe id="tca-iframe-0" data-src="https://www.youtube.com/embed/nDlZPSAo3hA?rel=0" src="about:blank"
                   allow="autoplay; fullscreen" allowfullscreen></iframe>
               </div>
             </div>
+            <div class="modal-slide" data-videoid="zjmZ8AOGLbI">
+              <div class="modal-video-wrap">
+                <iframe id="tca-iframe-1" data-src="https://www.youtube.com/embed/zjmZ8AOGLbI?rel=0" src="about:blank"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide" data-videoid="URA0a93uN7o">
+              <div class="modal-video-wrap">
+                <iframe id="tca-iframe-2" data-src="https://www.youtube.com/embed/URA0a93uN7o?rel=0" src="about:blank"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide" data-videoid="AmOrSyvz4vE">
+              <div class="modal-video-wrap">
+                <iframe id="tca-iframe-3" data-src="https://www.youtube.com/embed/AmOrSyvz4vE?rel=0" src="about:blank"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide" data-videoid="_ZMrVONWI_g">
+              <div class="modal-video-wrap">
+                <iframe id="tca-iframe-4" data-src="https://www.youtube.com/embed/_ZMrVONWI_g?rel=0" src="about:blank"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide" data-videoid="59hhucNYOyQ">
+              <div class="modal-video-wrap">
+                <iframe id="tca-iframe-5" data-src="https://www.youtube.com/embed/59hhucNYOyQ?rel=0" src="about:blank"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide" data-videoid="AIiwzf96n6k">
+              <div class="modal-video-wrap">
+                <iframe id="tca-iframe-6" data-src="https://www.youtube.com/embed/AIiwzf96n6k?rel=0" src="about:blank"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide" data-videoid="KaJBKgiuhgM">
+              <div class="modal-video-wrap">
+                <iframe id="tca-iframe-7" data-src="https://www.youtube.com/embed/KaJBKgiuhgM?rel=0" src="about:blank"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
             <div class="modal-slide">
               <div class="modal-video-wrap">
                 <iframe src="https://www.youtube.com/embed/zjmZ8AOGLbI?rel=0"
@@ -641,46 +685,36 @@
     }
 
     // ── TCA Interviews video folder carousel ──
-    const tcaVideos = [
-      'nDlZPSAo3hA',
-      'zjmZ8AOGLbI',
-      'URA0a93uN7o',
-      'AmOrSyvz4vE',
-      '_ZMrVONWI_g',
-      '59hhucNYOyQ',
-      'AIiwzf96n6k',
-      'KaJBKgiuhgM'
-    ];
     let tcaCurrent = 0;
 
     function tcaGoTo(index) {
-      tcaCurrent = ((index % tcaVideos.length) + tcaVideos.length) % tcaVideos.length;
-      const track = document.getElementById('track-tca-interviews');
-      const slides = track.querySelectorAll('.modal-slide');
+      const track    = document.getElementById('track-tca-interviews');
+      const slides   = Array.from(track.querySelectorAll('.modal-slide'));
+      const total    = slides.length;
+      tcaCurrent     = ((index % total) + total) % total;
 
-      // Stop all iframes first
-      slides.forEach(slide => {
-        const iframe = slide.querySelector('iframe');
-        if (iframe) iframe.src = `https://www.youtube.com/embed/${tcaVideos[[...slides].indexOf(slide)]}?rel=0`;
-        slide.classList.remove('active');
+      slides.forEach((slide, i) => {
+        const iframe  = slide.querySelector('iframe');
+        const videoId = slide.dataset.videoid;
+        slide.classList.toggle('active', i === tcaCurrent);
+        if (i === tcaCurrent) {
+          // Load and autoplay active video
+          iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+        } else {
+          // Stop other videos
+          iframe.src = 'about:blank';
+        }
       });
 
-      // Activate current and autoplay
-      slides[tcaCurrent].classList.add('active');
-      const activeIframe = slides[tcaCurrent].querySelector('iframe');
-      if (activeIframe) {
-        activeIframe.src = `https://www.youtube.com/embed/${tcaVideos[tcaCurrent]}?autoplay=1&rel=0`;
-      }
-
-      // Update counter
+      // Counter
       const counter = document.getElementById('counter-tca-interviews');
-      if (counter) counter.textContent = `${tcaCurrent + 1} / ${tcaVideos.length}`;
+      if (counter) counter.textContent = `${tcaCurrent + 1} / ${total}`;
 
-      // Update dots
+      // Dots
       const dotsEl = document.getElementById('dots-tca-interviews');
       if (dotsEl) {
         dotsEl.innerHTML = '';
-        tcaVideos.forEach((_, i) => {
+        slides.forEach((_, i) => {
           const btn = document.createElement('button');
           btn.className = 'modal-dot' + (i === tcaCurrent ? ' active' : '');
           btn.onclick = () => tcaGoTo(i);
@@ -689,11 +723,13 @@
       }
     }
 
-    function tcaMove(dir) { tcaGoTo(tcaCurrent + dir); }
+    function tcaMove(dir) {
+      const total = document.querySelectorAll('#track-tca-interviews .modal-slide').length;
+      tcaGoTo(((tcaCurrent + dir) % total + total) % total);
+    }
 
     function openProject(id) {
       if (id === 'tca-interviews') {
-        tcaCurrent = 0;
         document.getElementById('modal-tca-interviews').classList.add('open');
         document.body.style.overflow = 'hidden';
         tcaGoTo(0);
@@ -706,8 +742,8 @@
 
     function closeTcaInterviews() {
       const modal = document.getElementById('modal-tca-interviews');
-      modal.querySelectorAll('iframe').forEach((iframe, i) => {
-        iframe.src = `https://www.youtube.com/embed/${tcaVideos[i]}?rel=0`;
+      modal.querySelectorAll('iframe').forEach(iframe => {
+        iframe.src = 'about:blank';
       });
       modal.classList.remove('open');
       document.body.style.overflow = '';
