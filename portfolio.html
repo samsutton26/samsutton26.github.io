@@ -467,22 +467,58 @@
     <span class="modal-title">TCA Community Interviews</span>
     <div class="modal-carousel">
       <div class="modal-track-outer">
-        <button class="modal-btn prev" onclick="modalMove('tca-interviews', -1)">&#8592;</button>
-        <button class="modal-btn next" onclick="modalMove('tca-interviews', 1)">&#8594;</button>
+        <button class="modal-btn prev" onclick="tcaMove(-1)">&#8592;</button>
+        <button class="modal-btn next" onclick="tcaMove(1)">&#8594;</button>
         <div class="modal-track-wrap">
           <div class="modal-track" id="track-tca-interviews">
-            <!-- Video 1 -->
             <div class="modal-slide active">
               <div class="modal-video-wrap">
-                <iframe src="https://www.youtube.com/embed/nDlZPSAo3hA?autoplay=1&rel=0"
+                <iframe src="https://www.youtube.com/embed/nDlZPSAo3hA?rel=0"
                   allow="autoplay; fullscreen" allowfullscreen></iframe>
               </div>
             </div>
-            <!--
-              TO ADD MORE VIDEOS TO THIS FOLDER:
-              Copy the block above and replace nDlZPSAo3hA with the new YouTube video ID.
-              The carousel will loop through all videos in the folder.
-            -->
+            <div class="modal-slide">
+              <div class="modal-video-wrap">
+                <iframe src="https://www.youtube.com/embed/zjmZ8AOGLbI?rel=0"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide">
+              <div class="modal-video-wrap">
+                <iframe src="https://www.youtube.com/embed/URA0a93uN7o?rel=0"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide">
+              <div class="modal-video-wrap">
+                <iframe src="https://www.youtube.com/embed/AmOrSyvz4vE?rel=0"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide">
+              <div class="modal-video-wrap">
+                <iframe src="https://www.youtube.com/embed/_ZMrVONWI_g?rel=0"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide">
+              <div class="modal-video-wrap">
+                <iframe src="https://www.youtube.com/embed/59hhucNYOyQ?rel=0"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide">
+              <div class="modal-video-wrap">
+                <iframe src="https://www.youtube.com/embed/AIiwzf96n6k?rel=0"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide">
+              <div class="modal-video-wrap">
+                <iframe src="https://www.youtube.com/embed/KaJBKgiuhgM?rel=0"
+                  allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -604,11 +640,63 @@
       modalGoTo(id, state[id].current + dir);
     }
 
+    // ── TCA Interviews video folder carousel ──
+    const tcaVideos = [
+      'nDlZPSAo3hA',
+      'zjmZ8AOGLbI',
+      'URA0a93uN7o',
+      'AmOrSyvz4vE',
+      '_ZMrVONWI_g',
+      '59hhucNYOyQ',
+      'AIiwzf96n6k',
+      'KaJBKgiuhgM'
+    ];
+    let tcaCurrent = 0;
+
+    function tcaGoTo(index) {
+      tcaCurrent = ((index % tcaVideos.length) + tcaVideos.length) % tcaVideos.length;
+      const track = document.getElementById('track-tca-interviews');
+      const slides = track.querySelectorAll('.modal-slide');
+
+      // Stop all iframes first
+      slides.forEach(slide => {
+        const iframe = slide.querySelector('iframe');
+        if (iframe) iframe.src = `https://www.youtube.com/embed/${tcaVideos[[...slides].indexOf(slide)]}?rel=0`;
+        slide.classList.remove('active');
+      });
+
+      // Activate current and autoplay
+      slides[tcaCurrent].classList.add('active');
+      const activeIframe = slides[tcaCurrent].querySelector('iframe');
+      if (activeIframe) {
+        activeIframe.src = `https://www.youtube.com/embed/${tcaVideos[tcaCurrent]}?autoplay=1&rel=0`;
+      }
+
+      // Update counter
+      const counter = document.getElementById('counter-tca-interviews');
+      if (counter) counter.textContent = `${tcaCurrent + 1} / ${tcaVideos.length}`;
+
+      // Update dots
+      const dotsEl = document.getElementById('dots-tca-interviews');
+      if (dotsEl) {
+        dotsEl.innerHTML = '';
+        tcaVideos.forEach((_, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'modal-dot' + (i === tcaCurrent ? ' active' : '');
+          btn.onclick = () => tcaGoTo(i);
+          dotsEl.appendChild(btn);
+        });
+      }
+    }
+
+    function tcaMove(dir) { tcaGoTo(tcaCurrent + dir); }
+
     function openProject(id) {
       if (id === 'tca-interviews') {
-        // Video folder — open modal directly without image carousel init
+        tcaCurrent = 0;
         document.getElementById('modal-tca-interviews').classList.add('open');
         document.body.style.overflow = 'hidden';
+        tcaGoTo(0);
         return;
       }
       initCarousel(id);
@@ -618,9 +706,8 @@
 
     function closeTcaInterviews() {
       const modal = document.getElementById('modal-tca-interviews');
-      // Stop video playback by clearing iframes
-      modal.querySelectorAll('iframe').forEach(iframe => {
-        iframe.src = iframe.src;
+      modal.querySelectorAll('iframe').forEach((iframe, i) => {
+        iframe.src = `https://www.youtube.com/embed/${tcaVideos[i]}?rel=0`;
       });
       modal.classList.remove('open');
       document.body.style.overflow = '';
