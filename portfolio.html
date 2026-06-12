@@ -380,6 +380,12 @@
         <div class="project-info"><h3>TCA Community Interviews</h3></div>
       </div>
 
+      <!-- 20: Better Belaying (folder) -->
+      <div class="project-card" id="project-20" onclick="openProject('better-belaying')">
+        <img loading="lazy" src="https://img.youtube.com/vi/8SxPepDYSXw/maxresdefault.jpg" alt="Better Belaying at TCA">
+        <div class="project-info"><h3>Better Belaying at TCA</h3></div>
+      </div>
+
     </div>
   </div>
 
@@ -457,6 +463,46 @@
       <div class="modal-footer">
         <div class="modal-dots" id="dots-kalymnos"></div>
         <div class="modal-counter" id="counter-kalymnos"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BETTER BELAYING MODAL -->
+  <div class="project-modal" id="modal-better-belaying">
+    <button class="modal-close" onclick="closeBetterBelaying()">✕</button>
+    <span class="modal-title">Better Belaying at TCA</span>
+    <div class="modal-carousel">
+      <div class="modal-track-outer">
+        <button class="modal-btn prev" onclick="bbMove(-1)">&#8592;</button>
+        <button class="modal-btn next" onclick="bbMove(1)">&#8594;</button>
+        <div class="modal-track-wrap">
+          <div class="modal-track" id="track-better-belaying">
+            <div class="modal-slide active" data-videoid="8SxPepDYSXw">
+              <div class="modal-video-wrap">
+                <iframe id="bb-iframe-0" data-src="https://www.youtube.com/embed/8SxPepDYSXw?rel=0" src="about:blank" allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide" data-videoid="lHH5TP7vFcI">
+              <div class="modal-video-wrap">
+                <iframe id="bb-iframe-1" data-src="https://www.youtube.com/embed/lHH5TP7vFcI?rel=0" src="about:blank" allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide" data-videoid="oK1bNwWjNeM">
+              <div class="modal-video-wrap">
+                <iframe id="bb-iframe-2" data-src="https://www.youtube.com/embed/oK1bNwWjNeM?rel=0" src="about:blank" allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="modal-slide" data-videoid="sDBnn5Iqbs8">
+              <div class="modal-video-wrap">
+                <iframe id="bb-iframe-3" data-src="https://www.youtube.com/embed/sDBnn5Iqbs8?rel=0" src="about:blank" allow="autoplay; fullscreen" allowfullscreen></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-dots" id="dots-better-belaying"></div>
+        <div class="modal-counter" id="counter-better-belaying"></div>
       </div>
     </div>
   </div>
@@ -684,6 +730,52 @@
       modalGoTo(id, state[id].current + dir);
     }
 
+    // ── Better Belaying video folder carousel ──
+    let bbCurrent = 0;
+
+    function bbGoTo(index) {
+      const track  = document.getElementById('track-better-belaying');
+      const slides = Array.from(track.querySelectorAll('.modal-slide'));
+      const total  = slides.length;
+      bbCurrent    = ((index % total) + total) % total;
+
+      slides.forEach((slide, i) => {
+        const iframe  = slide.querySelector('iframe');
+        const videoId = slide.dataset.videoid;
+        slide.classList.toggle('active', i === bbCurrent);
+        iframe.src = i === bbCurrent
+          ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
+          : 'about:blank';
+      });
+
+      const counter = document.getElementById('counter-better-belaying');
+      if (counter) counter.textContent = `${bbCurrent + 1} / ${total}`;
+
+      const dotsEl = document.getElementById('dots-better-belaying');
+      if (dotsEl) {
+        dotsEl.innerHTML = '';
+        slides.forEach((_, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'modal-dot' + (i === bbCurrent ? ' active' : '');
+          btn.onclick = () => bbGoTo(i);
+          dotsEl.appendChild(btn);
+        });
+      }
+    }
+
+    function bbMove(dir) {
+      const total = document.querySelectorAll('#track-better-belaying .modal-slide').length;
+      bbGoTo(((bbCurrent + dir) % total + total) % total);
+    }
+
+    function closeBetterBelaying() {
+      document.querySelectorAll('#track-better-belaying iframe').forEach(iframe => {
+        iframe.src = 'about:blank';
+      });
+      document.getElementById('modal-better-belaying').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
     // ── TCA Interviews video folder carousel ──
     let tcaCurrent = 0;
 
@@ -729,6 +821,12 @@
     }
 
     function openProject(id) {
+      if (id === 'better-belaying') {
+        document.getElementById('modal-better-belaying').classList.add('open');
+        document.body.style.overflow = 'hidden';
+        bbGoTo(0);
+        return;
+      }
       if (id === 'tca-interviews') {
         document.getElementById('modal-tca-interviews').classList.add('open');
         document.body.style.overflow = 'hidden';
@@ -775,6 +873,7 @@
         const id = modal.id.replace('modal-', '');
         if (id === 'video') closeVideo();
         else if (id === 'tca-interviews') closeTcaInterviews();
+        else if (id === 'better-belaying') closeBetterBelaying();
         else closeProject(id);
       });
     });
@@ -785,6 +884,7 @@
           const id = m.id.replace('modal-', '');
           if (id === 'video') closeVideo();
           else if (id === 'tca-interviews') closeTcaInterviews();
+          else if (id === 'better-belaying') closeBetterBelaying();
           else closeProject(id);
         });
       }
